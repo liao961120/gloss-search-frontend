@@ -192,6 +192,9 @@ button#search {
 .results > div:nth-child(2n + 1) {
     background:rgba(197, 197, 197, 0.212);
 }
+.results > div:nth-child(2n) {
+    border: solid 2px rgba(197, 197, 197, 0.452);
+}
 
 .kwic::before {
     counter-increment: num;
