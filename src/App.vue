@@ -28,4 +28,9 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+span.matchedtoken {
+    background: rgba(255, 255, 0, 0.479);
+    padding: 0.08em 0.1em;
+    border-radius: 6px;
+}
 </style>

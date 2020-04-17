@@ -6,10 +6,16 @@
             
             <!-- Glossed Lines -->
             <div class="gloss__words">
-                <div class="gloss__word" v-for="(tup, idx) in gloss.gloss" :key="idx + Math.random()">
-                    <p class="gloss__line gloss__line--1">{{ tup[0] }}</p>
-                    <p class="gloss__line gloss__line--2">{{ tup[1] }}</p>
-                    <p class="gloss__line gloss__line--3">{{ tup[2] }}</p>
+                <div class="gloss__word" v-for="(tup, idx) in gloss_hightlighted" :key="idx + Math.random()">
+                    <p class="gloss__line gloss__line--1">
+                        <span v-html="tup[0]"></span>
+                    </p>
+                    <p class="gloss__line gloss__line--2">
+                        <span v-html="tup[1]"></span>
+                    </p>
+                    <p class="gloss__line gloss__line--3">
+                        <span v-html="tup[2]"></span>
+                    </p>
                 </div>
             </div>
 
@@ -22,8 +28,31 @@
 
 <script>
 export default {
-    computed: {},
-    props: ["gloss"],
+    computed: {
+        gloss_hightlighted() {
+            function highlight(tk, query, isRegex) {
+                if (isRegex) {
+                    var regex = RegExp(query);
+                    if (regex.test(tk)) tk = `<span class='matchedtoken'>${tk}</span>`
+
+                } else {
+                    if (tk.includes(query)) tk = `<span class='matchedtoken'>${tk}</span>`
+                }
+                return tk
+            }
+
+            return this.gloss.gloss.map(tup => [
+                highlight(tup[0], this.query.query, this.query.regex), 
+                highlight(tup[1], this.query.query, this.query.regex), 
+                highlight(tup[2], this.query.query, this.query.regex)
+                ] )
+        }
+    },
+    methods: {},
+    filters: {
+
+    },
+    props: ["gloss", "query"],
     data() {
         return {
         /*

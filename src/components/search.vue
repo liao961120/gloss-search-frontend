@@ -34,7 +34,7 @@
 
         <div class="results">
             <template v-for="(res, i) in results">
-                <Leipzig v-bind:gloss="res" :key="i" />
+                <Leipzig v-bind:gloss="res" v-bind:query="query" :key="i" />
             </template>
             
         </div>
