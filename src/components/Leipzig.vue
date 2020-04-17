@@ -31,13 +31,29 @@ export default {
     computed: {
         gloss_hightlighted() {
             function highlight(tk, query, isRegex) {
+                var query_arr = query.split(',').map(x => x.trim());
+                
+                // RegEx search
                 if (isRegex) {
-                    var regex = RegExp(query);
-                    if (regex.test(tk)) tk = `<span class='matchedtoken'>${tk}</span>`
+                    for (var i=0; i<query_arr.length; i++) {
+                        var regex = RegExp(query_arr[i]);
+                        if (regex.test(tk)) {
+                            tk = `<span class='matchedtoken'>${tk}</span>`
+                            break
+                        }
+                    }
 
+                // Exact search
                 } else {
-                    if (tk.includes(query)) tk = `<span class='matchedtoken'>${tk}</span>`
+                    for (var j=0; j<query_arr.length; j++) {
+                        if (tk.includes(query_arr[j])) {
+                            tk = `<span class='matchedtoken'>${tk}</span>`
+                            break
+                        }
+                    }
                 }
+
+
                 return tk
             }
 
