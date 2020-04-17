@@ -29,9 +29,12 @@ export default {
   margin-top: 60px;
 }
 span.matchedtoken {
-    background: rgba(255, 255, 0, 0.479);
-    padding: 0.08em 0.1em;
-    border-radius: 6px;
+  background: rgba(255, 255, 0, 0.582);
+  /* padding: 0.08em 0.1em; */
+  /* border-radius: 6px; */
+}
+span.matchedfree {
+  background: rgba(136, 255, 0, 0.561);
 }
 html {
   scroll-behavior: smooth !important;

@@ -20,7 +20,9 @@
             </div>
 
             <!-- Free Lines -->
-            <p v-for="(line, i) in gloss.free" :key="i + Math.random()" :class="`gloss__line--free gloss__line gloss__line--${i + 4}`">{{ line }}</p>
+            <p v-for="(line, i) in free_highlighted" :key="i + Math.random()" :class="`gloss__line--free gloss__line gloss__line--${i + 4}`">
+                <span v-html="line"></span>
+            </p>
 
         </div>
     </div>
@@ -30,15 +32,21 @@
 export default {
     computed: {
         gloss_hightlighted() {
+            
+            function myReplace(str, group1) {
+                return "<span class='matchedtoken'>" + group1 + "</span>";
+            }
+
             function highlight(tk, query, isRegex) {
                 var query_arr = query.split(',').map(x => x.trim());
                 
                 // RegEx search
                 if (isRegex) {
                     for (var i=0; i<query_arr.length; i++) {
-                        var regex = RegExp(query_arr[i]);
+                        var regex = RegExp(`(${query_arr[i]})`, "g");
                         if (regex.test(tk)) {
-                            tk = `<span class='matchedtoken'>${tk}</span>`
+                            //tk = `<span class='matchedtoken'>${tk}</span>`
+                            tk = tk.replace(regex, myReplace);
                             break
                         }
                     }
@@ -47,21 +55,53 @@ export default {
                 } else {
                     for (var j=0; j<query_arr.length; j++) {
                         if (tk.includes(query_arr[j])) {
-                            tk = `<span class='matchedtoken'>${tk}</span>`
+                            var regex2 = RegExp(`(${query_arr[j]})`, "g");
+                            tk = tk.replace(regex2, myReplace);
                             break
                         }
                     }
                 }
 
-
                 return tk
             }
 
-            return this.gloss.gloss.map(tup => [
-                highlight(tup[0], this.query.query, this.query.regex), 
-                highlight(tup[1], this.query.query, this.query.regex), 
-                highlight(tup[2], this.query.query, this.query.regex)
-                ] )
+            if (this.query.type == 'gloss')
+                return this.gloss.gloss.map(tup => [
+                        highlight(tup[0], this.query.query, this.query.regex), 
+                        highlight(tup[1], this.query.query, this.query.regex), 
+                        highlight(tup[2], this.query.query, this.query.regex)
+                        ]
+                    )
+            else
+                return this.gloss.gloss
+        },
+
+        free_highlighted() {
+
+            function myReplace(str, group1) {
+                return "<span class='matchedfree'>" + group1 + "</span>";
+            }
+
+            function highlight(tk, query) {
+                var query_arr = query.split(',').map(x => x.trim());
+
+                // Exact search
+                for (var j=0; j<query_arr.length; j++) {
+                    if (tk.includes(query_arr[j])) {
+                        var regex2 = RegExp(`(${query_arr[j]})`, "g");
+                        tk = tk.replace(regex2, myReplace);
+                    }
+                }
+                return tk
+            }
+
+            // Check search type
+            if (this.query.type == 'free')
+                return this.gloss.free.map(sent => 
+                        highlight(sent, this.query.query, this.query.regex)
+                    )
+            else
+                return this.gloss.free
         }
     },
     methods: {},
@@ -197,10 +237,13 @@ span.src-num::after {
     content: ".";
 }
 span.src-doc {
-    background: rgba(199, 199, 199, 0.603);
+    background: rgba(53, 53, 53, 0.664);
+    color: white;
     border-radius: 8px;
     padding: 2px 5px;
-    float:right
+    float: right;
+    font-family: 'Monaco', 'Consolas', 'Courier New', Courier, monospace;
+    font-size: 0.63em;
 }
 
 .gloss--glossed:after {
