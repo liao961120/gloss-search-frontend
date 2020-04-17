@@ -33,4 +33,7 @@ span.matchedtoken {
     padding: 0.08em 0.1em;
     border-radius: 6px;
 }
+html {
+  scroll-behavior: smooth !important;
+}
 </style>
