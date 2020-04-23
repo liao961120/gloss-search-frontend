@@ -23,8 +23,9 @@
                         <label for="regex">Exact</label>
                         <input type="radio" name="regex" id='regexSearch' value="1" v-model="query.regex"/>
                         <label for="male">RegEx</label>
+                        <input type="checkbox" id="hyphens" v-model="query.hyphens" true-value=1 false-value=0>
+                        <label for="checkbox">Hyphens</label>
                     </li>
-                    <li class='this-is-placeholder'></li>
                 </ul>
             </div>
             <div class="info">
@@ -58,15 +59,16 @@ export default {
         return {
             query: {
                 query: "",
-                regex: 0,
+                regex: 1,
                 type: 'gloss',
+                hyphens: 1,
             },
             results: []
         };
     },
     methods: {
         searchGloss: function() {
-            const url = `http://localhost:1420/query?query=${this.query.query}&regex=${this.query.regex}&type=${this.query.type}`;
+            const url = `http://localhost:1420/query?query=${this.query.query}&regex=${this.query.regex}&type=${this.query.type}&hyphens=${this.query.hyphens}`;
             //clean up
             this.$http.get(url).then(function(data) {
                 this.results = data.body;
@@ -108,11 +110,11 @@ export default {
     position: fixed;
     margin: 0;
     padding: 20px 0;
-    height: 100px;
+    height: 115px;
     width: 90%;
     min-width: 900px;
     top: 0;
-    background: white;
+    background: rgba(255, 255, 255, 0.979);
 }
 .query {
     position: relative;
@@ -215,6 +217,7 @@ button#search {
 .info span.num-of-results {
     width: 15em;
     font-size: 0.7em;
+    
     /* text-align: left; */
 }
 .num-of-results:before {
@@ -259,5 +262,8 @@ a#to-top {
 } 
 a#to-bottom {
     bottom: 15px;
-} 
+}
+#hyphens {
+    margin-left: 0.4em;
+}
 </style>
