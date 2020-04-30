@@ -9,6 +9,6 @@ echo 'https://glosss.netlify.app/* https://glosss.yongfu.name/:splat 301!' > _re
 git init
 git add -A
 git commit -m 'deploy'
-git push -f https://github.com/liao961120/gloss-search.git master:deploy
+git push -f https://github.com/liao961120/gloss-search-frontend.git master:deploy
 
 cd -

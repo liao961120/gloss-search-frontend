@@ -4,6 +4,10 @@
         <span class="gloss-src src-doc">{{ gloss.file }}</span>
         <div class="example gloss--glossed">
             
+            <p v-if="gloss.ori.length > 0" class="gloss__line--original gloss__line gloss__line--0">
+                <span v-html="ori_highlighted"></span>
+            </p>
+
             <!-- Glossed Lines -->
             <div class="gloss__words">
                 <div class="gloss__word" v-for="(tup, idx) in gloss_hightlighted" :key="idx + Math.random()">
@@ -31,12 +35,48 @@
 <script>
 export default {
     computed: {
-        gloss_hightlighted() {
-            
+        ori_highlighted() {
             function myReplace(str, group1) {
                 return "<span class='matchedtoken'>" + group1 + "</span>";
             }
+            function highlight(tk, query, isRegex) {
+                var query_arr = query.split(',').map(x => x.trim());
+                
+                // RegEx search
+                if (isRegex) {
+                    for (var i=0; i<query_arr.length; i++) {
+                        var regex = RegExp(`(${query_arr[i]})`, "g");
+                        if (regex.test(tk)) {
+                            //tk = `<span class='matchedtoken'>${tk}</span>`
+                            tk = tk.replace(regex, myReplace);
+                            break
+                        }
+                    }
 
+                // Exact search
+                } else {
+                    for (var j=0; j<query_arr.length; j++) {
+                        if (tk.includes(query_arr[j])) {
+                            var regex2 = RegExp(`(${query_arr[j]})`, "g");
+                            tk = tk.replace(regex2, myReplace);
+                            break
+                        }
+                    }
+                }
+
+                return tk
+            }
+
+            if (this.query.type == 'gloss')
+                return this.gloss.ori.map(tk => highlight(tk, this.query.query, this.query.regex)).join(' ')
+            else
+                return this.gloss.ori.join(' ')
+        },
+
+        gloss_hightlighted() {
+            function myReplace(str, group1) {
+                return "<span class='matchedtoken'>" + group1 + "</span>";
+            }
             function highlight(tk, query, isRegex) {
                 var query_arr = query.split(',').map(x => x.trim());
                 
@@ -115,6 +155,7 @@ export default {
         gloss: {
             'file': '20200325.docx',
             'num': 1,
+            'ori': ['yakay', 'ku', 'tatulru', 'ku', 'ababay/sauvalay', 'ku', 'agili'],
             'gloss': [
                 ('yakay', 'have', '有'),
                 ('ku', 'three', '3'),
@@ -301,7 +342,10 @@ ol.gloss--glossed li {
 
 .gloss__line--original {
     font-weight: bold;
-    margin-bottom: 1em;
+    font-style: italic;
+    word-spacing: 0.3em;
+    font-family: 'Times New Roman', Times, serif;
+    margin-bottom: 0.6em;
 }
 
 .gloss__line--free,

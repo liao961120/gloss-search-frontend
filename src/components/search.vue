@@ -23,8 +23,14 @@
                         <label for="regex">Exact</label>
                         <input type="radio" name="regex" id='regexSearch' value="1" v-model="query.regex"/>
                         <label for="male">RegEx</label>
-                        <input type="checkbox" id="hyphens" v-model="query.hyphens" true-value=1 false-value=0>
-                        <label for="checkbox">Hyphens</label>
+                    </li>
+                    <li class="docfilter">
+                        <input
+                            type="text"
+                            spellcheck="false"
+                            placeholder="docx filter (filename regex pattern)"
+                            v-model.lazy="docfilter"
+                        />
                     </li>
                 </ul>
             </div>
@@ -34,7 +40,7 @@
         </div>
 
         <div class="results">
-            <template v-for="(res, i) in results">
+            <template v-for="(res, i) in filtered_results">
                 <Leipzig v-bind:gloss="res" v-bind:query="query" :key="i" />
             </template>
             
@@ -61,41 +67,34 @@ export default {
                 query: "",
                 regex: 1,
                 type: 'gloss',
-                hyphens: 1,
             },
-            results: []
+            results: [],
+            files: [],
+            docfilter: '',
         };
+    },
+    computed: {
+        filtered_results: function() {
+            if (this.docfilter == '') return this.results 
+            var doc_pat = RegExp(`${this.docfilter}`, "g");
+
+            if (this.results.length > 0)
+                return this.results.filter(gloss => {
+                    return doc_pat.test(gloss.file);
+                })
+            else 
+                return this.results
+        }
     },
     methods: {
         searchGloss: function() {
-            const url = `http://localhost:1420/query?query=${this.query.query}&regex=${this.query.regex}&type=${this.query.type}&hyphens=${this.query.hyphens}`;
+            const url = `http://localhost:1420/query?query=${this.query.query}&regex=${this.query.regex}&type=${this.query.type}`;
             //clean up
             this.$http.get(url).then(function(data) {
                 this.results = data.body;
+                this.files = [...new Set(data.body.map(x => x.file))];
             });
         },
-    },
-    computed: {
-        showResults() {
-            return this.results.slice(0, this.showNext.curr);
-        },
-        kwicStyKeyWidth() {
-            return this.results[0].keyword.length * 6;
-        },
-        kwicStyCtxWidth() {
-            return (95 - this.results[0].keyword.length * 6) / 2;
-        }
-    },
-    filters: {
-        contextShow: function(lst, tag = false, sep = " ") {
-            const lst2 = [];
-            lst.forEach(elem => {
-                if (tag) lst2.push(elem[0] + "/" + elem[1]);
-                else lst2.push(elem[0]);
-            });
-
-            return lst2.join(sep);
-        }
     }
 };
 </script>
@@ -164,6 +163,17 @@ button#search {
 .setting input[type="number"] {
     padding: 0;
     width: 2.5em;
+}
+li.docfilter {
+    width: 70%;
+}
+li.docfilter > input {
+    display: inline-block;
+    width: 100%;
+    margin: 0;
+    padding: 0.1em;
+    font-size: 0.9em;
+    font-family: Monaco, 'Courier New', Courier, monospace;
 }
 .kwic span {
     display: inline-block;
@@ -262,8 +272,5 @@ a#to-top {
 } 
 a#to-bottom {
     bottom: 15px;
-}
-#hyphens {
-    margin-left: 0.4em;
 }
 </style>
