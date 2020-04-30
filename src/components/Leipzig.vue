@@ -47,7 +47,6 @@ export default {
                     for (var i=0; i<query_arr.length; i++) {
                         var regex = RegExp(`(${query_arr[i]})`, "g");
                         if (regex.test(tk)) {
-                            //tk = `<span class='matchedtoken'>${tk}</span>`
                             tk = tk.replace(regex, myReplace);
                             break
                         }
@@ -170,7 +169,6 @@ export default {
                 '#n  yakay\tku 可省略']
             }
         */
-
             abbr: {
                 ___: "placeholder",
                 1: "first person",

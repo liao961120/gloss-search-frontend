@@ -3,13 +3,35 @@
         <div class="header">
             <div class="query">
                 <div class="keyword">
-                    <input
-                        type="text"
-                        spellcheck="false"
-                        placeholder="ka,ki"
-                        v-model.lazy="query.query"
-                    />
-                    <button v-on:click="searchGloss" id="search">Search</button>
+
+                    <template v-if="database == 0">
+                        <input
+                            type="text"
+                            spellcheck="false"
+                            placeholder="ka,ki"
+                            v-model.lazy="query.query"
+                        />
+                        <button v-on:click="searchGloss" id="search">Search</button>
+                    </template>
+                    <template v-else>
+                        <input
+                            type="text"
+                            spellcheck="false"
+                            placeholder="ka"
+                            v-model.lazy="query.query"
+                        />
+                        <button class="search-btn">Search</button>
+                    </template>
+
+                    <ul class="setting database">
+                        <li>
+                            <input type="radio" name="webdb" id='webdb' value="0" v-model="database"/>
+                            <label for="male">Local</label>
+                            <input type="radio" name="webdb" id='webdb' value="1" v-model="database"/>
+                            <label for="male">Web</label>
+                        </li>
+                    </ul>
+                    
                 </div>
                 <ul class="setting">
                     <li>
@@ -35,13 +57,21 @@
                 </ul>
             </div>
             <div class="info">
-                <span class="num-of-results">{{ this.results.length }}</span>
+                <span v-if="database == 0" class="num-of-results">{{ this.results.length }}</span>
+                <span v-else class="num-of-results">{{ this.vue_seach_results.length }}</span>
             </div>
         </div>
 
         <div class="results">
-            <template v-for="(res, i) in filtered_results">
-                <Leipzig v-bind:gloss="res" v-bind:query="query" :key="i" />
+            <template v-if="database == 0">
+                <template v-for="(res, i) in filtered_results">
+                    <Leipzig v-bind:gloss="res" v-bind:query="query" :key="i" />
+                </template>
+            </template>
+            <template v-else>
+                <template v-for="(res, i) in vue_seach_results">
+                    <Leipzig v-bind:gloss="res" v-bind:query="query" :key="i" />
+                </template>
             </template>
             
         </div>
@@ -68,8 +98,9 @@ export default {
                 regex: 1,
                 type: 'gloss',
             },
+            //vuesearch: '',
+            database: 0,
             results: [],
-            files: [],
             docfilter: '',
         };
     },
@@ -84,6 +115,65 @@ export default {
                 })
             else 
                 return this.results
+        },
+
+        vue_seach_results: function() {
+           
+            var vuesearch = this.query.query.trim();
+            const search_pat = RegExp(`${vuesearch}`, "g");
+            const results = JSON.parse(JSON.stringify(this.filtered_results));
+
+            var search_results = [];
+            //console.log(this.filtered_results)
+            //return this.filtered_results;
+
+            for (var i=0; i<results.length; i++) {
+
+                // Convert to flat data structure
+                var gloss_content = results[i].gloss.flat();
+                gloss_content.push(...results[i].ori.flat());
+
+                // Seach Gloss
+                if (this.query.type == "gloss") {
+                    for (var j=0; j<gloss_content.length; j++) {
+                        var tk = gloss_content[j];
+
+                        // Exact search
+                        if (this.query.regex == 0) {
+                            if (tk == vuesearch ) {
+                                search_results.push(results[i]);
+                                break
+                            }
+                        // Regex search
+                        } else {
+                            if (search_pat.test(tk)) {
+                                search_results.push(results[i]);
+                                break
+                            }
+                        }
+                    }
+
+                // Search Notes
+                } else {
+                    var free_content = this.results[i].free.join('\n');
+                    if (free_content.includes(vuesearch))
+                        search_results.push(results[i]);
+                }
+                    
+            }
+
+            console.log(search_results.length)
+            return search_results
+        }
+    },
+    watch: {
+        // whenever question changes, this function will run
+        database: function () {
+            if (this.database == 1) {
+                this.$http.get('https://yongfu.name/gloss-data/data.json').then(function(data) {
+                    this.results = data.body;
+                });
+            }
         }
     },
     methods: {
@@ -92,7 +182,7 @@ export default {
             //clean up
             this.$http.get(url).then(function(data) {
                 this.results = data.body;
-                this.files = [...new Set(data.body.map(x => x.file))];
+                //this.files = [...new Set(data.body.map(x => x.file))];
             });
         },
     }
@@ -121,6 +211,19 @@ export default {
     width: 100%;
     margin-bottom: 0px;
 }
+
+.database.setting > li {
+    display: inline-block;
+    padding: 5px;
+    margin: 3px;
+    width: 100%;
+    font-size: 10px;
+}
+.database.setting > li > input {
+    display: inline-block;
+    padding: 0;
+    width: 2.5em;
+}
 .keyword {
     display: inline-block;
     height: 70px;
@@ -148,7 +251,7 @@ export default {
 .keyword input {
     margin: 0;
 }
-button#search {
+button#search, button.search-btn {
     margin: 5px auto;
     width: 30%;
     padding: 5px;
