@@ -98,7 +98,6 @@ export default {
                 regex: 1,
                 type: 'gloss',
             },
-            //vuesearch: '',
             database: 0,
             results: [],
             docfilter: '',
@@ -107,7 +106,7 @@ export default {
     computed: {
         filtered_results: function() {
             if (this.docfilter == '') return this.results 
-            var doc_pat = RegExp(`${this.docfilter}`, "g");
+            var doc_pat = RegExp(`${this.docfilter}`);
 
             if (this.results.length > 0)
                 return this.results.filter(gloss => {
@@ -118,10 +117,12 @@ export default {
         },
 
         vue_seach_results: function() {
-           
+            
             var vuesearch = this.query.query.trim();
             const search_pat = RegExp(`${vuesearch}`, "g");
-            const results = this.filtered_results; //JSON.parse(JSON.stringify(this.filtered_results));
+            const results = this.filtered_results;
+
+            if (vuesearch == '') return results;
 
             var search_results = [];
 
