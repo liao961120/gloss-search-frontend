@@ -121,11 +121,9 @@ export default {
            
             var vuesearch = this.query.query.trim();
             const search_pat = RegExp(`${vuesearch}`, "g");
-            const results = JSON.parse(JSON.stringify(this.filtered_results));
+            const results = this.filtered_results; //JSON.parse(JSON.stringify(this.filtered_results));
 
             var search_results = [];
-            //console.log(this.filtered_results)
-            //return this.filtered_results;
 
             for (var i=0; i<results.length; i++) {
 

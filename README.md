@@ -1,6 +1,6 @@
 # gloss-search
 
-Front-end of [`liao961120/gloss-search-backend`](https://github.com/liao961120/gloss-search-backend), built in Vue2.
+Front-end for [`liao961120/gloss-search-backend`](https://github.com/liao961120/gloss-search-backend), built in Vue2.
 
 ![Demo](https://img.yongfu.name/gif/gloss-search-min.gif)
 
