@@ -131,7 +131,7 @@ export default {
                 regex: 1,
                 type: 'gloss',
             },
-            database: 0,
+            database: 1,
             results: [],
             docfilter: '',
         };
