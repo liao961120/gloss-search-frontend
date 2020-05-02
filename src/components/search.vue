@@ -234,11 +234,11 @@ export default {
     position: fixed;
     margin: 0;
     padding: 20px 0;
-    height: 115px;
+    height: 95px;
     width: 90%;
     min-width: 900px;
     top: 0;
-    background: rgba(255, 255, 255, 0.979);
+    background: rgba(255, 255, 255, 0.965);
 }
 .query {
     position: relative;
