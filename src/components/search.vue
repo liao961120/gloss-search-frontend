@@ -201,13 +201,19 @@ export default {
             return search_results
         }
     },
+    created: function () {
+        this.$http.get('https://yongfu.name/gloss-data/data.json').then(function(data) {
+            this.results = data.body;
+        });
+    },
     watch: {
-        // whenever question changes, this function will run
         database: function () {
             if (this.database == 1) {
                 this.$http.get('https://yongfu.name/gloss-data/data.json').then(function(data) {
                     this.results = data.body;
                 });
+            } else {
+                this.results = [];
             }
         }
     },
