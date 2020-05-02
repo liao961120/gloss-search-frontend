@@ -33,82 +33,23 @@
 </template>
 
 <script>
+import { Highlight } from '@/helpers.js'
+
 export default {
     computed: {
         ori_highlighted() {
-            function myReplace(str, group1) {
-                return "<span class='matchedtoken'>" + group1 + "</span>";
-            }
-            function highlight(tk, query, isRegex) {
-                var query_arr = query.split(',').map(x => x.trim());
-                
-                // RegEx search
-                if (isRegex) {
-                    for (var i=0; i<query_arr.length; i++) {
-                        var regex = RegExp(`(${query_arr[i]})`, "g");
-                        if (regex.test(tk)) {
-                            tk = tk.replace(regex, myReplace);
-                            break
-                        }
-                    }
-
-                // Exact search
-                } else {
-                    for (var j=0; j<query_arr.length; j++) {
-                        if (tk.includes(query_arr[j])) {
-                            var regex2 = RegExp(`(${query_arr[j]})`, "g");
-                            tk = tk.replace(regex2, myReplace);
-                            break
-                        }
-                    }
-                }
-
-                return tk
-            }
-
             if (this.query.type == 'gloss')
-                return this.gloss.ori.map(tk => highlight(tk, this.query.query, this.query.regex)).join(' ')
+                return this.gloss.ori.map(tk => Highlight.highlight(tk, this.query.query, this.query.regex)).join(' ')
             else
                 return this.gloss.ori.join(' ')
         },
 
         gloss_hightlighted() {
-            function myReplace(str, group1) {
-                return "<span class='matchedtoken'>" + group1 + "</span>";
-            }
-            function highlight(tk, query, isRegex) {
-                var query_arr = query.split(',').map(x => x.trim());
-                
-                // RegEx search
-                if (isRegex) {
-                    for (var i=0; i<query_arr.length; i++) {
-                        var regex = RegExp(`(${query_arr[i]})`, "g");
-                        if (regex.test(tk)) {
-                            //tk = `<span class='matchedtoken'>${tk}</span>`
-                            tk = tk.replace(regex, myReplace);
-                            break
-                        }
-                    }
-
-                // Exact search
-                } else {
-                    for (var j=0; j<query_arr.length; j++) {
-                        if (tk.includes(query_arr[j])) {
-                            var regex2 = RegExp(`(${query_arr[j]})`, "g");
-                            tk = tk.replace(regex2, myReplace);
-                            break
-                        }
-                    }
-                }
-
-                return tk
-            }
-
             if (this.query.type == 'gloss')
                 return this.gloss.gloss.map(tup => [
-                        highlight(tup[0], this.query.query, this.query.regex), 
-                        highlight(tup[1], this.query.query, this.query.regex), 
-                        highlight(tup[2], this.query.query, this.query.regex)
+                        Highlight.highlight(tup[0], this.query.query, this.query.regex), 
+                        Highlight.highlight(tup[1], this.query.query, this.query.regex), 
+                        Highlight.highlight(tup[2], this.query.query, this.query.regex)
                         ]
                     )
             else
@@ -116,28 +57,10 @@ export default {
         },
 
         free_highlighted() {
-
-            function myReplace(str, group1) {
-                return "<span class='matchedfree'>" + group1 + "</span>";
-            }
-
-            function highlight(tk, query) {
-                var query_arr = query.split(',').map(x => x.trim());
-
-                // Exact search
-                for (var j=0; j<query_arr.length; j++) {
-                    if (tk.includes(query_arr[j])) {
-                        var regex2 = RegExp(`(${query_arr[j]})`, "g");
-                        tk = tk.replace(regex2, myReplace);
-                    }
-                }
-                return tk
-            }
-
             // Check search type
             if (this.query.type == 'free')
                 return this.gloss.free.map(sent => 
-                        highlight(sent, this.query.query, this.query.regex)
+                        Highlight.highlight(sent, this.query.query, this.query.regex)
                     )
             else
                 return this.gloss.free
@@ -169,98 +92,6 @@ export default {
                 '#n  yakay\tku 可省略']
             }
         */
-            abbr: {
-                ___: "placeholder",
-                1: "first person",
-                2: "second person",
-                3: "third person",
-                "1SG": "first person singular",
-                "2SG": "second person singular",
-                "3SG": "third person singular",
-                "1PL": "first person plural",
-                "2PL": "second person plural",
-                "3PL": "third person plural",
-                A: "agent-like argument of canonical transitive verb",
-                ABL: "ablative",
-                ABS: "absolutive",
-                ACC: "accusative",
-                ADJ: "adjective",
-                ADV: "adverb(ial)",
-                AGR: "agreement",
-                ALL: "allative",
-                ANTIP: "antipassive",
-                APPL: "applicative",
-                ART: "article",
-                AUX: "auxiliary",
-                BEN: "benefactive",
-                CAUS: "causative",
-                CLF: "classifier",
-                COM: "comitative",
-                COMP: "complementizer",
-                COMPL: "completive",
-                COND: "conditional",
-                COP: "copula",
-                CVB: "converb",
-                DAT: "dative",
-                DECL: "declarative",
-                DEF: "definite",
-                DEM: "demonstrative",
-                DET: "determiner",
-                DIST: "distal",
-                DISTR: "distributive",
-                DU: "dual",
-                DUR: "durative",
-                ERG: "ergative",
-                EXCL: "exclusive",
-                F: "feminine",
-                FOC: "focus",
-                FUT: "future",
-                GEN: "genitive",
-                IMP: "imperative",
-                INCL: "inclusive",
-                IND: "indicative",
-                INDF: "indefinite",
-                INF: "infinitive",
-                INS: "instrumental",
-                INTR: "intransitive",
-                IPFV: "imperfective",
-                IRR: "irrealis",
-                LOC: "locative",
-                M: "masculine",
-                N: "neuter",
-                NEG: "negation / negative",
-                NMLZ: "nominalizer / nominalization",
-                NOM: "nominative",
-                OBJ: "object",
-                OBL: "oblique",
-                P: "patient-like argument of canonical transitive verb",
-                PASS: "passive",
-                PFV: "perfective",
-                PL: "plural",
-                POSS: "possessive",
-                PRED: "predicative",
-                PRF: "perfect",
-                PRS: "present",
-                PROG: "progressive",
-                PROH: "prohibitive",
-                PROX: "proximal / proximate",
-                PST: "past",
-                PTCP: "participle",
-                PURP: "purposive",
-                Q: "question particle / marker",
-                QUOT: "quotative",
-                RECP: "reciprocal",
-                REFL: "reflexive",
-                REL: "relative",
-                RES: "resultative",
-                S: "single argument of canonical intransitive verb",
-                SBJ: "subject",
-                SBJV: "subjunctive",
-                SG: "singular",
-                TOP: "topic",
-                TR: "transitive",
-                VOC: "vocative"
-            }
         };
     }
 };

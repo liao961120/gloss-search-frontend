@@ -33,7 +33,7 @@ span.matchedtoken {
   /* padding: 0.08em 0.1em; */
   /* border-radius: 6px; */
 }
-span.matchedfree {
+.gloss__line--free span.matchedtoken {
   background: rgba(136, 255, 0, 0.561);
 }
 html {
