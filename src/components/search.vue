@@ -134,7 +134,7 @@ export default {
             database: 1,
             results: [],
             docfilter: '',
-            webdb_url: 'https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json'
+            webdb_url: 'https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json',
         };
     },
     computed: {
