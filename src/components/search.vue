@@ -134,6 +134,7 @@ export default {
             database: 1,
             results: [],
             docfilter: '',
+            webdb_url: 'https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json'
         };
     },
     computed: {
@@ -202,14 +203,14 @@ export default {
         }
     },
     created: function () {
-        this.$http.get('https://yongfu.name/gloss-data/data.json').then(function(data) {
+        this.$http.get(this.webdb_url).then(function(data) {
             this.results = data.body;
         });
     },
     watch: {
         database: function () {
             if (this.database == 1) {
-                this.$http.get('https://yongfu.name/gloss-data/data.json').then(function(data) {
+                this.$http.get(this.webdb_url).then(function(data) {
                     this.results = data.body;
                 });
             } else {
