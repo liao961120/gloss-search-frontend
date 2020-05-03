@@ -11,7 +11,7 @@
             <div class="response" v-if="response != ''">  
                 <p v-if="response.status == 202">
                     Success! <br> 
-                    Processing data now, query new data 5 minutes later!
+                    Processing data now, query new data 3 minutes later!
                 </p>
                 <p v-else>
                     Error {{ response.status }}! <br>
