@@ -1,6 +1,6 @@
 # gloss-search
 
-Searcing interlinear glosses, all done through the web browser.
+Searcing interlinear glosses, and all you need is a web browser!
 
 ![Demo](https://img.yongfu.name/gif/gloss-search-min.gif)
 
