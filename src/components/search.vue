@@ -111,18 +111,22 @@
 
         <a id="to-top" onclick="document.documentElement.scrollTop = 0;">▲</a>
         <a id="to-bottom" onclick="window.scrollTo(0, document.body.scrollHeight);">▼</a>
+
+        <Travis v-if="database == 1" />
     </div>
 </template>
 
 <script>
 import Leipzig from "@/components/Leipzig.vue";
+import Travis from "@/components/travis.vue";
 // @ is an alias to /src
 
 
 export default {
     name: "gloss-search",
     components: {
-        Leipzig
+        Leipzig,
+        Travis
     },
     data() {
         return {
