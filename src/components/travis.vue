@@ -1,6 +1,6 @@
 <template>
     <div>
-        <modal name="trigger-build" :width="350" :height="210" class="modal">
+        <modal name="trigger-build" :width="350" :height="220" class="modal">
             <div>
                 <h3>Request Data Update</h3>
                 <input type="password" v-model="build_psswd" placeholder="password"/>
@@ -9,9 +9,9 @@
             <div class="response">
                 <template v-if="response != ''">
                     <p class="status" v-if="response.status == 202">
-                    <!-- <p> -->
+                    <!-- <p class="status"> -->
                         <b>Success</b>! <br> 
-                        Processing data, wait 3 minutes! <br>
+                        Processing, wait 3 minutes! <br>
                     </p>
                     <p class="status" v-else>
                         <b style="color:red;">Error {{ response.status }}</b>! <br>
@@ -95,11 +95,11 @@ export default {
     margin-left: 15px;
 }
 .response {
-    margin-top: 1.5em;
+    margin-top: 20px;
     margin-bottom: 0;
-    padding-bottom: 0;
+    /* padding-bottom: 15px; */
     font-size: 0.8em;
-    min-height: 3.5em;
+    min-height: 85px;
 }
 #travis-build-btn {
     position: fixed;
@@ -113,21 +113,23 @@ export default {
 }
 .info {
     /* display: inline-block; */
-    float: right;
-    text-align: right;
+    /* float: right; */
+    position: absolute;
+    display: block;
+    right: 1.7%;
+    bottom: 1.4%;
     font-size: 0.58em;
     color: grey;
-    padding-top: 1em;
-    padding-right: 0.5em;
 }
 .log:hover {
     font-weight: bold;
     text-decoration: none;
 }
+
 .status {
-    width: 70%;
-    padding: 6px 1%;
-    margin: 0 14.5%;
+    width: 65%;
+    padding: 10px 1%;
+    margin: 0 17.5% 0 17.5%;
     border: 1.2px solid rgba(128, 128, 128, 0.226);
     border-radius: 5px;
 }
