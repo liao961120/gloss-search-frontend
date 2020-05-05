@@ -40,6 +40,8 @@ export default {
         ori_highlighted() {
             if (this.query.type == 'gloss')
                 return this.gloss.ori.map(tk => Highlight.highlight(tk, this.query.query, this.query.regex)).join(' ')
+            else if (this.query.type == 'ori')
+                return Highlight.highlight(this.gloss.ori.join(' '), this.query.query, this.query.regex)
             else
                 return this.gloss.ori.join(' ')
         },

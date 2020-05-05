@@ -69,6 +69,14 @@
                             type="radio"
                             name="search-type"
                             id="glossSearch"
+                            value="ori"
+                            v-model="query.type"
+                        />
+                        <label for="male">Original</label>
+                        <input
+                            type="radio"
+                            name="search-type"
+                            id="glossSearch"
                             value="gloss"
                             v-model="query.type"
                         />
@@ -179,9 +187,21 @@ export default {
             for (var i=0; i<results.length; i++) {
                 // Gloss line contents
                 var gloss_content = [ ...new Set(results[i].gloss.flat().concat(results[i].ori.flat())) ];  // an array
+                var ori_str = results[i].ori.join(' ');
 
+                // Search Ori (full line Regex match)
+                if (this.query.type == 'ori') {
+                    // Exact search
+                    if (this.query.regex == 0) {
+                        if (ori_str.includes(search_pats[0])) search_results.push(results[i]);
+                    }
+                    // Regex search
+                    else {
+                        if (search_pats_regex[0].test(ori_str)) search_results.push(results[i]);
+                    }
+                    
                 // Seach Gloss
-                if (this.query.type == "gloss") {
+                } else if (this.query.type == "gloss") {
                     
                     var matchNum = 0;
                     for (let j=0; j<search_pats.length; j++) {
@@ -394,8 +414,6 @@ button.search-btn {
 .info span.num-of-results {
     width: 15em;
     font-size: 0.7em;
-
-    /* text-align: left; */
 }
 .num-of-results:before {
     content: "總筆數：";
