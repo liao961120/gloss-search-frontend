@@ -5,20 +5,40 @@
                 <div class="keyword">
                     <template v-if="database == 0">
                         <input
+                            class="query-input"
                             type="text"
                             spellcheck="false"
-                            placeholder="ka,ki"
+                            placeholder="Search pattern (e.g. Takanaw, ^ki$, ^k[aiu]$)"
                             v-model.lazy="query.query"
                         />
+                        
+                        <input
+                            class="docxfilter"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="docx filter (filename pattern)"
+                            v-model.lazy="docfilter"
+                        />
+
                         <button v-on:click="searchGloss" id="search">Search</button>
                     </template>
                     <template v-else>
                         <input
+                            class="query-input"
                             type="text"
                             spellcheck="false"
-                            placeholder="ka,ki"
+                            placeholder="Search pattern (e.g. Takanaw, ^ki$, ^k[aiu]$)"
                             v-model.lazy="query.query"
                         />
+
+                        <input
+                            class="docxfilter"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="docx filter (filename pattern)"
+                            v-model.lazy="docfilter"
+                        />
+
                         <button class="search-btn">Search</button>
                     </template>
 
@@ -80,14 +100,7 @@
                         />
                         <label for="male">RegEx</label>
                     </li>
-                    <li class="docfilter">
-                        <input
-                            type="text"
-                            spellcheck="false"
-                            placeholder="docx filter (filename regex pattern)"
-                            v-model.lazy="docfilter"
-                        />
-                    </li>
+                    <li class="placeholder"></li>
                 </ul>
             </div>
             <div class="info">
@@ -273,7 +286,7 @@ export default {
 .keyword {
     display: inline-block;
     height: 70px;
-    width: 64%;
+    width: 55%;
     margin: 0;
     padding: 0;
     text-align: left;
@@ -281,26 +294,31 @@ export default {
 .setting {
     display: inline-block;
     height: 80px;
-    width: 36%;
+    width: 45%;
     margin: 0;
     padding: 0;
     list-style-type: none;
 }
 .keyword input,
 .keyword button {
-    width: 90%;
-    margin: 3px;
     padding: 0.45em;
     font-size: 11px;
     font-family: Monaco, "Courier New", Courier, monospace;
 }
 .keyword input {
-    margin: 0;
+    margin: 1% 1% 0 2px;
+}
+.keyword input.query-input  {
+    width: 45%;
+}
+.keyword input.docxfilter {
+    width: 37%;
+    font-family: Monaco, "Courier New", Courier, monospace;
 }
 button#search,
 button.search-btn {
-    margin: 5px auto;
-    width: 30%;
+    margin: 5px 2px;
+    width: 22%;
     padding: 5px;
 }
 .setting li {
@@ -313,17 +331,6 @@ button.search-btn {
 .setting input[type="number"] {
     padding: 0;
     width: 2.5em;
-}
-li.docfilter {
-    width: 70%;
-}
-li.docfilter > input {
-    display: inline-block;
-    width: 100%;
-    margin: 0;
-    padding: 0.1em;
-    font-size: 0.9em;
-    font-family: Monaco, "Courier New", Courier, monospace;
 }
 .kwic span {
     display: inline-block;
@@ -381,7 +388,7 @@ li.docfilter > input {
 .info button {
     display: inline-block;
     margin: 5px 1.2em 5px 0;
-    padding: 6px;
+    padding: 6px 2px;
     line-height: 0.75em;
 }
 .info span.num-of-results {
