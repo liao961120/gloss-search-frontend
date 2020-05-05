@@ -296,7 +296,7 @@ export default {
     padding: 5px;
     margin: 3px;
     width: 100%;
-    font-size: 10px;
+    font-size: 12px;
 }
 .database.setting > li > input {
     display: inline-block;
@@ -459,5 +459,83 @@ a#to-top {
 }
 a#to-bottom {
     bottom: 15px;
+}
+
+@media (max-width: 600px) {
+    .container {
+        width: 100%;
+        margin: 5px auto;
+    }
+    .header {
+        position: fixed;
+        margin: 0;
+        padding: 20px 0;
+        height: 95px;
+        width: 100%;
+        min-width: 850px;
+        top: 0;
+        background: rgba(255, 255, 255, 0.965);
+    }
+    .keyword {
+        display: inline-block;
+        height: 70px;
+        width: 30%;
+        margin: 0;
+        padding: 0;
+        text-align: left;
+    }
+    .setting {
+        display: inline-block;
+        height: 80px;
+        width: 70%;
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        text-align: left;
+    }
+    .setting > li {
+        /*font-size: 10px;*/
+        margin-left: 0;
+        padding-left: 0;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+    .container {
+        width: 95%;
+        margin: 10px auto;
+    }
+    .keyword {
+        display: inline-block;
+        height: 70px;
+        width: 45%;
+        margin: 0;
+        padding: 0;
+        text-align: left;
+    }
+    .header {
+        position: fixed;
+        margin: 0;
+        padding: 20px 0;
+        height: 95px;
+        width: 100%;
+        min-width: 800px;
+        top: 0;
+        background: rgba(255, 255, 255, 0.965);
+    }
+    .setting {
+        display: inline-block;
+        height: 80px;
+        width: 55%;
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        text-align: left;
+    }
+    .setting > li {
+        /*font-size: 10px;*/
+        margin-left: 0;
+        padding-left: 0;
+    }
 }
 </style>
