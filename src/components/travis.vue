@@ -9,8 +9,7 @@
             <div class="response">
                 <template v-if="response != ''">
                     <p class="status" v-if="response.status == 202">
-                    <!-- <p class="status"> -->
-                        <b>Success</b>! <br> 
+                        <b style="color:blue;">Success</b>! <br> 
                         Processing, wait 3 minutes! <br>
                     </p>
                     <p class="status" v-else>
@@ -97,7 +96,6 @@ export default {
 .response {
     margin-top: 20px;
     margin-bottom: 0;
-    /* padding-bottom: 15px; */
     font-size: 0.8em;
     min-height: 85px;
 }
@@ -112,8 +110,6 @@ export default {
     height: 1.08em;
 }
 .info {
-    /* display: inline-block; */
-    /* float: right; */
     position: absolute;
     display: block;
     right: 1.7%;
