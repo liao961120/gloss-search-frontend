@@ -134,6 +134,7 @@
         <a id="to-bottom" onclick="window.scrollTo(0, document.body.scrollHeight);">▼</a>
 
         <Travis v-if="database == 1" />
+        <router-link class="router" to="/glossary" title="lexical items">🗒</router-link>
     </div>
 </template>
 
@@ -459,6 +460,19 @@ a#to-top {
 }
 a#to-bottom {
     bottom: 15px;
+}
+.router {
+    position: absolute;
+    right: 1%;
+    top: 1%;
+    font-size: 0.8em;
+    color: blue;
+    font-weight: bold;
+    text-decoration: none;
+    color: #d96900;
+}
+.router:hover {
+    font-size: 0.83em;
 }
 
 @media (max-width: 600px) {

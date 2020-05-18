@@ -1,16 +1,19 @@
 <template>
     <div id="app">
-        <Search />
+        <!-- <Search /> -->
+        <keep-alive>
+            <router-view></router-view>
+        </keep-alive>
     </div>
 </template>
 
 <script>
-import Search from "./components/search.vue";
+//import Search from "./components/search.vue";
 
 export default {
     name: "App",
     components: {
-        Search,
+        //Search,
     },
 };
 </script>
