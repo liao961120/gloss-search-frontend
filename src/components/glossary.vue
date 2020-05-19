@@ -1,27 +1,50 @@
 <template>
-    <div class="container">
-        <div v-for="(word, i) in words" class="grid-item" :key="i + word">
-            <h3>{{ word[0] }}</h3>
-
-            <ul>
-                <li class="tooltip" v-for="(sense, j) in Object.keys(word[1])" :key="j + sense">
-                    {{ sense }}
-                    <span class="tooltiptext">{{ word[1][sense].join('\n') }}</span>
-                </li>
-            </ul>
+    <div class="outer">
+        <div class="search-box">
+            <input
+                class="word-filter"
+                type="text"
+                spellcheck="false"
+                placeholder="Enter anything (words, definitions, or translations)"
+                v-model="search"
+            />
         </div>
+        <div class="grid">
+            <div v-for="(word, i) in filtered_words" class="grid-item" :key="i + word">
+                <h3>{{ word[0] }}</h3>
 
-        <router-link class="router" to="/" title="interlinear gloss">🔍</router-link>
+                <ul>
+                    <li class="tooltip" v-for="(sense, j) in Object.keys(word[1])" :key="j + sense">
+                        {{ sense }}
+                        <span class="tooltiptext" v-html="word[1][sense].join('<br>')"></span>
+                    </li>
+                </ul>
+            </div>
+            <router-link class="router" to="/" title="interlinear gloss">🔍</router-link> 
+        </div>
     </div>
-        
 </template>
 
 <script>
     export default {
         data() {
             return {
+                search: '',
                 words: [],
                 webdb_url: 'https://yongfu.name/gloss-search/2020_Budai_Rukai/glossary.json',
+            }
+        },
+        computed: {
+            filtered_words: function() {
+                if (this.search == '') return this.words 
+                var pat = RegExp(`${this.search}`);
+
+                if (this.words.length > 0)
+                    return this.words.filter(word => {
+                        return word[2].some( tk => pat.test(tk) );
+                    })
+                else 
+                    return this.words
             }
         },
         created: function () {
@@ -33,6 +56,27 @@
 </script>
 
 <style scoped>
+.search-box {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: 30px;
+    padding: 15px 0;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.898);
+    z-index: 2;
+}
+input.word-filter {
+    position: relative;
+    display: inline-block;
+    width: 91%;
+    max-width: 500px;
+    font-size: 0.75em;
+    padding-left: 0.1em;
+    font-family: Monaco, "Courier New", Courier, monospace;
+}
+
 /* Tooltip container */
 .tooltip {
   position: relative;
@@ -45,7 +89,7 @@
   background-color: #595959;
   color: #fff;
   text-align: center;
-  padding: 5px 3px;
+  padding: 5px 6px;
   border-radius: 6px;
   font-size: 0.75em;
  
@@ -68,12 +112,16 @@ h3 {
     padding-top: 0;
     margin-top: 0;
 }
-div.container {
+div.outer {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+}
+div.grid {
     display: grid;
     grid-template-columns: 33% 33% 33%;
     grid-column-gap: 1%;
     grid-row-gap: 10px;
-    width: 95%;
+    width: 90%;
     margin: 10px auto;
     text-align: left;
 }
@@ -86,18 +134,5 @@ div.container {
     /*margin: 10px 4%;*/
     padding: 1%;
     /*border: 1px solid;*/
-}
-.router {
-    position: absolute;
-    right: 1%;
-    top: 1%;
-    font-size: 0.8em;
-    color: blue;
-    font-weight: bold;
-    text-decoration: none;
-    color: #d96900;
-}
-.router:hover {
-    font-size: 0.83em;
 }
 </style>
