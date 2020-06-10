@@ -1,6 +1,6 @@
 <template>
     <div>
-        <span class="gloss-src src-num">{{ gloss.num }}</span> 
+        <span class="gloss-src src-num">{{ gloss.num }}</span>
         <span class="gloss-src src-doc">{{ gloss.file }}</span>
         <div class="example gloss--glossed">
             
@@ -27,8 +27,14 @@
             <p v-for="(line, i) in free_highlighted" :key="i + Math.random()" :class="`gloss__line--free gloss__line gloss__line--${i + 4}`">
                 <span v-html="line"></span>
             </p>
-
         </div>
+
+        <button v-if="!showplaintext" class="copy-glass" v-on:click="toPlainText(gloss)">Show</button>
+        <button v-if="showplaintext" class="copy-glass" v-on:click="showplaintext = false">Hide</button>
+        <template v-if="showplaintext">
+            <textarea class="plain-text-gloss" v-model="plain_text_gloss" :rows="plain_text_gloss.split('\n').length + 1" onmouseover="this.focus();this.select()" readonly="readonly"></textarea>
+        </template>
+        
     </div>
 </template>
 
@@ -68,13 +74,27 @@ export default {
                 return this.gloss.free
         }
     },
-    methods: {},
+    methods: {
+        toPlainText(gloss) {
+            const ori = (gloss.ori.length > 0 ? gloss.ori.join(' ') + '\n\n' : '');
+            const ori_align = (gloss.gloss.length > 0 ? gloss.gloss.map(x => x[0]).join('\t') + '\n' : '');
+            const eng_align = (gloss.gloss.length > 0 ? gloss.gloss.map(x => x[1]).join('\t') + '\n' : '');
+            const ch_align = (gloss.gloss.length > 0 ? gloss.gloss.map(x => x[2]).join('\t') + '\n\n' : '');
+            const en_free = (gloss.free[0] ? gloss.free[0] + '\n': '');
+            const ch_free = (gloss.free[1] ? gloss.free[1]: '');
+
+            this.plain_text_gloss = `${ori}${ori_align}${eng_align}${ch_align}${en_free}${ch_free}`;
+            this.showplaintext = true;
+        }
+    },
     filters: {
 
     },
     props: ["gloss", "query"],
     data() {
         return {
+            plain_text_gloss: 'aaaa',
+            showplaintext: false,
         /*
         gloss: {
             'file': '20200325.docx',
@@ -201,5 +221,10 @@ ol.gloss--glossed li {
 .gloss__line--3 {
     font-family: 'Times New Roman', Times, serif;
     font-size: 0.85em;
+}
+
+.plain-text-gloss {
+    display: block;
+    width: 80%;
 }
 </style>
