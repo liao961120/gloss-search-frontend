@@ -10,9 +10,9 @@
           align="center"
           class="mx-7 pa-0 full-width"
         >
-            <keep-alive>
+          <keep-alive>
               <router-view></router-view>
-            </keep-alive>
+          </keep-alive>
         </v-row>
       </v-container>
     </v-main>
@@ -36,7 +36,10 @@
 </script>
 
 <style>
-html { overflow-y: scroll }
+html { 
+  overflow-y: scroll;
+  scroll-behavior: smooth !important;
+}
 textarea {
     font-family: 'Monaco', 'Courier New', Courier, monospace !important;
 }
@@ -53,7 +56,6 @@ a#to-top:hover,
 a#to-bottom:hover {
     background: rgb(88, 88, 88);
     color: white;
-    font-size: 20px;
     cursor: pointer;
     user-select: none;
 }

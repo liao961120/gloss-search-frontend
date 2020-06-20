@@ -221,7 +221,11 @@ h3 {
     padding-top: 0;
     margin-top: 0;
 }
-
+.outer {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
 div.grid {
     display: grid;
     grid-template-columns: 33% 33% 33%;
@@ -230,15 +234,50 @@ div.grid {
     width: 90%;
     margin: 10px auto;
     text-align: left;
+    min-height: 0;  /* NEW */
+    min-width: 0;   /* NEW; needed for Firefox */
 }
 .grid-item {
     /*display: inline-block;*/
     /*width: 35%;*/
     min-height: 125px;
+    min-width: 33%;
     border: 1.5px solid rgba(100, 100, 100, 0.6);
     border-radius: 7px;
     /*margin: 10px 4%;*/
     padding: 1%;
     /*border: 1px solid;*/
+    overflow: hidden;  /* NEW */
+    min-width: 0; 
+}
+
+@media only screen and (max-width: 600px) {
+    div.outer {
+        max-width: 100%;
+        position: relative;
+    }
+    div.grid {
+        display: grid;
+        grid-template-columns: 90%;
+        grid-column-gap: 1%;
+        grid-row-gap: 10px;
+        width: 100%;
+        margin: 10px auto;
+        text-align: left;
+        min-height: 0;  /* NEW */
+        min-width: 0;   /* NEW; needed for Firefox */
+    }
+    .grid-item {
+        /*display: inline-block;*/
+        /*width: 35%;*/
+        min-height: 125px;
+        border: 1.5px solid rgba(100, 100, 100, 0.6);
+        border-radius: 7px;
+        /*margin: 10px 4%;*/
+        padding: 1%;
+        /*border: 1px solid;*/
+        overflow: hidden;  /* NEW */
+        min-width: 0; 
+    }
 }
 </style>
