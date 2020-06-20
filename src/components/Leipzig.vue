@@ -3,14 +3,17 @@
         <span class="gloss-src src-num">{{ gloss.num }}</span>
         <span class="gloss-src src-doc">{{ gloss.file }}</span>
         <div class="example gloss--glossed">
-            
             <p v-if="gloss.ori.length > 0" class="gloss__line--original gloss__line gloss__line--0">
                 <span v-html="ori_highlighted"></span>
             </p>
 
             <!-- Glossed Lines -->
             <div class="gloss__words">
-                <div class="gloss__word" v-for="(tup, idx) in gloss_hightlighted" :key="idx + Math.random()">
+                <div
+                    class="gloss__word"
+                    v-for="(tup, idx) in gloss_hightlighted"
+                    :key="idx + Math.random()"
+                >
                     <p class="gloss__line gloss__line--1">
                         <span v-html="tup[0]"></span>
                     </p>
@@ -24,78 +27,124 @@
             </div>
 
             <!-- Free Lines -->
-            <p v-for="(line, i) in free_highlighted" :key="i + Math.random()" :class="`gloss__line--free gloss__line gloss__line--${i + 4}`">
+            <p
+                v-for="(line, i) in free_highlighted"
+                :key="i + Math.random()"
+                :class="`gloss__line--free gloss__line gloss__line--${i + 4}`"
+            >
                 <span v-html="line"></span>
             </p>
         </div>
 
-        <button v-if="!showplaintext" class="copy-glass" v-on:click="toPlainText(gloss)">Show</button>
-        <button v-if="showplaintext" class="copy-glass" v-on:click="showplaintext = false">Hide</button>
+        <v-btn fab x-small dark color="blue-grey lighten-2" v-if="!showplaintext" class="copy-glass" v-on:click="toPlainText(gloss)">
+            <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+        <v-btn fab depressed x-small dark color="blue-grey" v-if="showplaintext" class="copy-glass" v-on:click="showplaintext = false">
+            <v-icon>mdi-eye-off-outline</v-icon>
+        </v-btn>
         <template v-if="showplaintext">
-            <textarea class="plain-text-gloss" v-model="plain_text_gloss" :rows="plain_text_gloss.split('\n').length + 1" onmouseover="this.focus();this.select()" readonly="readonly"></textarea>
+            <v-textarea 
+                v-model="plain_text_gloss" 
+                auto-grow 
+                outlined 
+                autofocus
+                class="grey--text text-body-2 pa-0 ma-0 monofont"
+                background-color="white"
+            ></v-textarea>
         </template>
-        
     </div>
 </template>
 
 <script>
-import { Highlight } from '@/helpers.js'
+import { Highlight } from "@/helpers.js";
 
 export default {
     computed: {
         ori_highlighted() {
-            if (this.query.type == 'gloss')
-                return this.gloss.ori.map(tk => Highlight.highlight(tk, this.query.query, this.query.regex)).join(' ')
-            else if (this.query.type == 'ori')
-                return Highlight.highlight(this.gloss.ori.join(' '), this.query.query, this.query.regex)
-            else
-                return this.gloss.ori.join(' ')
+            if (this.query.type == "gloss")
+                return this.gloss.ori
+                    .map(tk =>
+                        Highlight.highlight(
+                            tk,
+                            this.query.query,
+                            this.query.regex
+                        )
+                    )
+                    .join(" ");
+            else if (this.query.type == "ori")
+                return Highlight.highlight(
+                    this.gloss.ori.join(" "),
+                    this.query.query,
+                    this.query.regex
+                );
+            else return this.gloss.ori.join(" ");
         },
 
         gloss_hightlighted() {
-            if (this.query.type == 'gloss')
+            if (this.query.type == "gloss")
                 return this.gloss.gloss.map(tup => [
-                        Highlight.highlight(tup[0], this.query.query, this.query.regex), 
-                        Highlight.highlight(tup[1], this.query.query, this.query.regex), 
-                        Highlight.highlight(tup[2], this.query.query, this.query.regex)
-                        ]
+                    Highlight.highlight(
+                        tup[0],
+                        this.query.query,
+                        this.query.regex
+                    ),
+                    Highlight.highlight(
+                        tup[1],
+                        this.query.query,
+                        this.query.regex
+                    ),
+                    Highlight.highlight(
+                        tup[2],
+                        this.query.query,
+                        this.query.regex
                     )
-            else
-                return this.gloss.gloss
+                ]);
+            else return this.gloss.gloss;
         },
 
         free_highlighted() {
             // Check search type
-            if (this.query.type == 'free')
-                return this.gloss.free.map(sent => 
-                        Highlight.highlight(sent, this.query.query, this.query.regex)
+            if (this.query.type == "free")
+                return this.gloss.free.map(sent =>
+                    Highlight.highlight(
+                        sent,
+                        this.query.query,
+                        this.query.regex
                     )
-            else
-                return this.gloss.free
+                );
+            else return this.gloss.free;
         }
     },
     methods: {
         toPlainText(gloss) {
-            const ori = (gloss.ori.length > 0 ? gloss.ori.join(' ') + '\n\n' : '');
-            const ori_align = (gloss.gloss.length > 0 ? gloss.gloss.map(x => x[0]).join('\t') + '\n' : '');
-            const eng_align = (gloss.gloss.length > 0 ? gloss.gloss.map(x => x[1]).join('\t') + '\n' : '');
-            const ch_align = (gloss.gloss.length > 0 ? gloss.gloss.map(x => x[2]).join('\t') + '\n\n' : '');
-            const en_free = (gloss.free[0] ? gloss.free[0] + '\n': '');
-            const ch_free = (gloss.free[1] ? gloss.free[1]: '');
+            const ori =
+                gloss.ori.length > 0 ? gloss.ori.join(" ") + "\n\n" : "";
+            const ori_align =
+                gloss.gloss.length > 0
+                    ? gloss.gloss.map(x => x[0]).join("\t") + "\n"
+                    : "";
+            const eng_align =
+                gloss.gloss.length > 0
+                    ? gloss.gloss.map(x => x[1]).join("\t") + "\n"
+                    : "";
+            const ch_align =
+                gloss.gloss.length > 0
+                    ? gloss.gloss.map(x => x[2]).join("\t") + "\n\n"
+                    : "";
+            const en_free = gloss.free[0] ? gloss.free[0] + "\n" : "";
+            const ch_free = gloss.free[1] ? gloss.free[1] : "";
 
             this.plain_text_gloss = `${ori}${ori_align}${eng_align}${ch_align}${en_free}${ch_free}`;
             this.showplaintext = true;
         }
     },
-    filters: {
-
-    },
-    props: ["gloss", "query"],
+    filters: {},
+    props: ["gloss", "query", "showplaintext"],
     data() {
         return {
-            plain_text_gloss: 'aaaa',
-            showplaintext: false,
-        /*
+            plain_text_gloss: "",
+            //showplaintext: false
+            /*
         gloss: {
             'file': '20200325.docx',
             'num': 1,
@@ -134,7 +183,7 @@ span.src-doc {
     border-radius: 8px;
     padding: 2px 5px;
     float: right;
-    font-family: 'Monaco', 'Consolas', 'Courier New', Courier, monospace;
+    font-family: "Monaco", "Consolas", "Courier New", Courier, monospace;
     font-size: 0.63em;
 }
 
@@ -195,7 +244,7 @@ ol.gloss--glossed li {
     font-weight: bold;
     font-style: italic;
     word-spacing: 0.3em;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: "Times New Roman", Times, serif;
     margin-bottom: 0.6em;
 }
 
@@ -203,7 +252,7 @@ ol.gloss--glossed li {
 .gloss__line--no-align {
     clear: left;
     margin: 0 0;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: "Times New Roman", Times, serif;
     font-size: 0.78em;
 }
 
@@ -212,14 +261,14 @@ ol.gloss--glossed li {
 }
 
 .gloss__line--1 {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: "Times New Roman", Times, serif;
 }
 .gloss__line--2 {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: "Times New Roman", Times, serif;
     font-size: 0.85em;
 }
 .gloss__line--3 {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: "Times New Roman", Times, serif;
     font-size: 0.85em;
 }
 

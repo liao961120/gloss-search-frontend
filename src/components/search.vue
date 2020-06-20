@@ -1,122 +1,5 @@
 <template>
-    <div class="container">
-        <div class="header">
-            <div class="query">
-                <div class="keyword">
-                    <template v-if="database == 0">
-                        <input
-                            class="query-input"
-                            type="text"
-                            spellcheck="false"
-                            placeholder="Search pattern (e.g. Takanaw, ^ki$, ^k[aiu]$)"
-                            v-model.lazy="query.query"
-                        />
-                        
-                        <input
-                            class="docxfilter"
-                            type="text"
-                            spellcheck="false"
-                            placeholder="docx filter (filename pattern)"
-                            v-model.lazy="docfilter"
-                        />
-
-                        <button v-on:click="searchGloss" id="search">Search</button>
-                    </template>
-                    <template v-else>
-                        <input
-                            class="query-input"
-                            type="text"
-                            spellcheck="false"
-                            placeholder="Search pattern (e.g. Takanaw, ^ki$, ^k[aiu]$)"
-                            v-model.lazy="query.query"
-                        />
-
-                        <input
-                            class="docxfilter"
-                            type="text"
-                            spellcheck="false"
-                            placeholder="docx filter (filename pattern)"
-                            v-model.lazy="docfilter"
-                        />
-
-                        <button class="search-btn">Search</button>
-                    </template>
-
-                    <ul class="setting database">
-                        <li>
-                            <input
-                                type="radio"
-                                name="webdb"
-                                id="webdb"
-                                value="0"
-                                v-model="database"
-                            />
-                            <label for="male">Local</label>
-                            <input
-                                type="radio"
-                                name="webdb"
-                                id="webdb"
-                                value="1"
-                                v-model="database"
-                            />
-                            <label for="male">Web</label>
-                        </li>
-                    </ul>
-                </div>
-                <ul class="setting">
-                    <li>
-                        <input
-                            type="radio"
-                            name="search-type"
-                            id="glossSearch"
-                            value="ori"
-                            v-model="query.type"
-                        />
-                        <label for="male">Original</label>
-                        <input
-                            type="radio"
-                            name="search-type"
-                            id="glossSearch"
-                            value="gloss"
-                            v-model="query.type"
-                        />
-                        <label for="male">Gloss</label>
-                        <input
-                            type="radio"
-                            name="search-type"
-                            id="glossSearch"
-                            value="free"
-                            v-model="query.type"
-                        />
-                        <label for="regex">Notes</label>
-                    </li>
-                    <li>
-                        <input
-                            type="radio"
-                            name="regex"
-                            id="exactSearch"
-                            value="0"
-                            v-model="query.regex"
-                        />
-                        <label for="regex">Exact</label>
-                        <input
-                            type="radio"
-                            name="regex"
-                            id="regexSearch"
-                            value="1"
-                            v-model="query.regex"
-                        />
-                        <label for="male">RegEx</label>
-                    </li>
-                    <li class="placeholder"></li>
-                </ul>
-            </div>
-            <div class="info">
-                <span v-if="database == 0" class="num-of-results">{{ this.results.length }}</span>
-                <span v-else class="num-of-results">{{ this.vue_seach_results.length }}</span>
-            </div>
-        </div>
-
+    <div>
         <div class="results">
             <template v-if="database == 0">
                 <template v-for="(res, i) in filtered_results">
@@ -125,13 +8,181 @@
             </template>
             <template v-else>
                 <template v-for="(res, i) in vue_seach_results">
-                    <Leipzig v-bind:gloss="res" v-bind:query="query" :key="i" />
+                    <Leipzig v-bind:gloss="res" v-bind:query="query" v-bind:showplaintext="false" :key="i" />
                 </template>
             </template>
         </div>
+        <Travis v-if="database == 1"/>
 
-        <Travis v-if="database == 1" />
-        <router-link class="router" to="/glossary" title="lexical items">🗒</router-link>
+        <!-- Top Menu bar -->
+        <v-app-bar app color="blue-grey lighten-4" min-width="330">
+            <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+            <v-row justify="center" align="center">
+                <v-col>
+                    <v-text-field
+                        spellcheck="false"
+                        placeholder="Search patterns"
+                        :value="query_lazy"
+                        @change="v => query_lazy = v"
+                        outlined
+                        dense
+                        class="mt-6"
+                    />
+                </v-col>
+
+                <v-col>
+                    <v-text-field
+                        spellcheck="false"
+                        placeholder="docx filter"
+                        v-model.lazy="docfilter"
+                        outlined
+                        dense
+                        class="mt-6"
+                    />
+                </v-col>
+
+                <v-spacer class="d-none d-md-flex mr-5"></v-spacer>
+
+                <v-col class="d-none d-sm-flex">
+                    <v-select
+                        :items="querytypes"
+                        v-model="query.type"
+                        dense
+                        class="mt-6 px-0"
+                        outlined
+                        label="Search Mode"
+                    ></v-select>
+                </v-col>
+
+                <v-col class="d-none d-sm-flex mr-3" sm="2" lg="1">
+                    <v-switch
+                        v-model="query.regex"
+                        value="1"
+                        :true-value="1"
+                        :false-value="0"
+                        :label="(query.regex == '1' ? 'RegEx' : 'Exact')"
+                        inset dense
+                        class="mt-4" color="success"
+                    ></v-switch>
+                </v-col>
+
+                <v-col class="mr-5 pr-5" cols="1">
+                    <template v-if="database == 0">
+                        <v-btn small fab v-on:click="searchGloss">
+                            <v-badge
+                                v-if="results.length > 0"
+                                color="green"
+                                :content="results.length"
+                            >
+                                <v-icon>mdi-magnify</v-icon>
+                            </v-badge>
+                            <v-icon v-else>mdi-magnify</v-icon>
+                        </v-btn>
+                    </template>
+                    <template v-else>
+                        <v-btn small fab>
+                            <v-badge
+                                v-if="vue_seach_results.length > 0"
+                                color="green"
+                                :content="vue_seach_results.length"
+                            >
+                                <v-icon>mdi-magnify</v-icon>
+                            </v-badge>
+                            <v-icon v-else>mdi-magnify</v-icon>
+                        </v-btn>
+                    </template>
+                </v-col>
+            </v-row>
+        </v-app-bar>
+
+        <!-- Left drawer -->
+        <v-navigation-drawer width="268" v-model="drawer" app>
+            <v-list dense>
+
+                <v-list-item two-line class="mb-2">
+                    <v-list-item-avatar>
+                        <img src="https://rlads2019.github.io/14/ntugil.png">
+                    </v-list-item-avatar>
+
+                    <v-list-item-content>
+                    <v-list-item-title>Gloss Search</v-list-item-title>
+                    <v-list-item-subtitle class="text-overline">南島語料搜尋</v-list-item-subtitle>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-divider></v-divider>
+
+                <v-list-item link router to="/">
+                    <v-list-item-action>
+                        <v-icon>mdi-magnify</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Search</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                
+                <v-list-item link router to="/lexicon">
+                    <v-list-item-action>
+                        <v-icon>mdi-translate</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Lexicon</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
+                <v-list-item href="" target="_blank" >
+                    <v-list-item-action>
+                        <v-icon>mdi-text-box-multiple</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>User Guide</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
+                <v-divider></v-divider>
+                <v-subheader class="pb-0 mb-0">Data</v-subheader>
+
+                <v-list-item link v-on:click="showTravisModal">
+                    <v-list-item-action>
+                        <v-icon>mdi-update</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Data Update</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
+                <v-list-item>
+                    <v-list-item-action>
+                        <v-icon>mdi-database-sync</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-select
+                            :items="databases"
+                            v-model="database"
+                            outlined
+                            dense
+                            class="mt-6 px-0"
+                            label="Database"
+                        ></v-select>
+                    </v-list-item-content>
+                </v-list-item>
+
+                <v-divider></v-divider>
+            </v-list>
+
+
+            <v-footer absolute color="transparent" height="35" class="py-0">
+                <v-col
+                    class="text-center text-caption text--secondary"
+                    cols="12"
+                >
+                    Maintained by
+                    <a href="https://yongfu.name" target="_blank" class="blue-grey--text text-decoration-none font-weight-medium">
+                        Yongfu Liao
+                    </a>
+                </v-col>
+            </v-footer>
+
+        </v-navigation-drawer>
     </div>
 </template>
 
@@ -139,7 +190,6 @@
 import Leipzig from "@/components/Leipzig.vue";
 import Travis from "@/components/travis.vue";
 // @ is an alias to /src
-
 
 export default {
     name: "gloss-search",
@@ -149,103 +199,148 @@ export default {
     },
     data() {
         return {
+            travis: false,
+            drawer: null,
+            databases: [
+                {
+                    text: "霧台魯凱 (2020)",
+                    value: "https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json",
+                },
+                {
+                    text: "Local",
+                    value: 0  // Must be set to 0 for Vue logic
+                }
+            ],
+            querytypes: [
+                {
+                    text: "Original",
+                    value: "ori"
+                },
+                {
+                    text: "Gloss",
+                    value: "gloss"
+                },
+                {
+                    text: "Notes",
+                    value: "free"
+                }
+            ],
             query: {
                 query: "",
                 regex: 1,
-                type: 'gloss',
+                type: "gloss"
             },
-            database: 1,
+            database: "https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json",
             results: [],
-            docfilter: '',
-            webdb_url: 'https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json',
+            docfilter: ""
         };
     },
     computed: {
+        query_lazy: {
+            get() {
+                return this.query.query;
+            },
+            set(v) {
+                this.query.query = v;
+            }
+        },
         filtered_results: function() {
-            if (this.docfilter == '') return this.results 
+            if (this.docfilter == "") return this.results;
             var doc_pat = RegExp(`${this.docfilter}`);
 
             if (this.results.length > 0)
                 return this.results.filter(gloss => {
                     return doc_pat.test(gloss.file);
-                })
-            else 
-                return this.results
+                });
+            else return this.results;
         },
 
-
         vue_seach_results: function() {
-            if (this.query.query.trim() == '') return []; //this.results; //
+            if (this.query.query.trim() == "") return []; //this.results; //
 
             const results = this.filtered_results;
             const search_pats = this.query.query.trim().split(/\s*,\s*/);
             const search_pats_regex = search_pats.map(x => RegExp(x));
 
             var search_results = [];
-            for (var i=0; i<results.length; i++) {
+            for (var i = 0; i < results.length; i++) {
                 // Gloss line contents
-                var gloss_content = [ ...new Set(results[i].gloss.flat().concat(results[i].ori.flat())) ];  // an array
-                var ori_str = results[i].ori.join(' ');
+                var gloss_content = [
+                    ...new Set(
+                        results[i].gloss.flat().concat(results[i].ori.flat())
+                    )
+                ]; // an array
+                var ori_str = results[i].ori.join(" ");
 
                 // Search Ori (full line Regex match)
-                if (this.query.type == 'ori') {
+                if (this.query.type == "ori") {
                     // Exact search
                     if (this.query.regex == 0) {
-                        if (ori_str.includes(search_pats[0])) search_results.push(results[i]);
+                        if (ori_str.includes(search_pats[0]))
+                            search_results.push(results[i]);
                     }
                     // Regex search
                     else {
-                        if (search_pats_regex[0].test(ori_str)) search_results.push(results[i]);
+                        if (search_pats_regex[0].test(ori_str))
+                            search_results.push(results[i]);
                     }
-                    
-                // Seach Gloss
+
+                    // Seach Gloss
                 } else if (this.query.type == "gloss") {
-                    
                     var matchNum = 0;
-                    for (let j=0; j<search_pats.length; j++) {
-                        
+                    for (let j = 0; j < search_pats.length; j++) {
                         // Exact search
                         if (this.query.regex == 0) {
-                            let isMatch = gloss_content.some(tk => tk == search_pats[j]);
+                            let isMatch = gloss_content.some(
+                                tk => tk == search_pats[j]
+                            );
                             if (isMatch) matchNum++;
-                        // Regex search
+                            // Regex search
                         } else {
-                            let isMatch = gloss_content.some(tk => search_pats_regex[j].test(tk));
+                            let isMatch = gloss_content.some(tk =>
+                                search_pats_regex[j].test(tk)
+                            );
                             if (isMatch) matchNum++;
                         }
                     }
                     if (matchNum == search_pats.length)
                         search_results.push(results[i]);
 
-                // Search Notes
+                    // Search Notes
                 } else {
                     // Free line contents
-                    var free_content = results[i].free.join(' ');  // a string
-                    
+                    var free_content = results[i].free.join(" "); // a string
+
                     // Exact search
                     if (this.query.regex == 0) {
-                        if (search_pats.every(pat => free_content.includes(pat)))
+                        if (
+                            search_pats.every(pat => free_content.includes(pat))
+                        )
                             search_results.push(results[i]);
-                    // Regex search
+                        // Regex search
                     } else {
-                        if (search_pats_regex.every(pat => pat.test(free_content)))
+                        if (
+                            search_pats_regex.every(pat =>
+                                pat.test(free_content)
+                            )
+                        )
                             search_results.push(results[i]);
                     }
                 }
             }
 
-            return search_results
+            return search_results;
         }
     },
-    created: function () {
-        this.$http.get(this.webdb_url).then(function(data) {
+    created: function() {
+        this.$http.get(this.database).then(function(data) {
             this.results = data.body;
         });
     },
     watch: {
-        database: function () {
-            if (this.database == 1) {
-                this.$http.get(this.webdb_url).then(function(data) {
+        database: function() {
+            if (this.database != 0) {
+                this.$http.get(this.database).then(function(data) {
                     this.results = data.body;
                 });
             } else {
@@ -262,103 +357,15 @@ export default {
                 //this.files = [...new Set(data.body.map(x => x.file))];
             });
         },
+        showTravisModal: function() {
+            this.$modal.show("trigger-build");
+        },
     }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.container {
-    width: 90%;
-    margin: 30px auto;
-}
-.header {
-    position: fixed;
-    margin: 0;
-    padding: 20px 0;
-    height: 95px;
-    width: 90%;
-    min-width: 900px;
-    top: 0;
-    background: rgba(255, 255, 255, 0.965);
-}
-.query {
-    position: relative;
-    display: block;
-    width: 100%;
-    margin-bottom: 0px;
-}
-
-.database.setting > li {
-    display: inline-block;
-    padding: 5px;
-    margin: 3px;
-    width: 100%;
-    font-size: 12px;
-}
-.database.setting > li > input {
-    display: inline-block;
-    padding: 0;
-    width: 2.5em;
-}
-.keyword {
-    display: inline-block;
-    height: 70px;
-    width: 55%;
-    margin: 0;
-    padding: 0;
-    text-align: left;
-}
-.setting {
-    display: inline-block;
-    height: 80px;
-    width: 45%;
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-}
-.keyword input,
-.keyword button {
-    padding: 0.45em;
-    font-size: 11px;
-    font-family: Monaco, "Courier New", Courier, monospace;
-}
-.keyword input {
-    margin: 1% 1% 0 2px;
-}
-.keyword input.query-input  {
-    width: 45%;
-}
-.keyword input.docxfilter {
-    width: 37%;
-    font-family: Monaco, "Courier New", Courier, monospace;
-}
-button#search,
-button.search-btn {
-    margin: 5px 2px;
-    width: 22%;
-    padding: 5px;
-}
-.setting li {
-    display: inline-block;
-    padding: 5px;
-    margin: 3px;
-    width: 45%;
-    font-size: 12px;
-}
-.setting input[type="number"] {
-    padding: 0;
-    width: 2.5em;
-}
-.kwic span {
-    display: inline-block;
-    width: 40%;
-    height: 1.5em;
-    /* border: 1px solid black; */
-    font-size: 0.78em;
-    margin: 3px auto;
-    padding: 0.1em;
-}
 .left {
     text-align: right;
 }
@@ -366,8 +373,10 @@ button.search-btn {
     text-align: left;
 }
 .results {
-    margin-top: 175px;
+    /* margin-top: 175px; */
+    width: 100%;
     text-align: left;
+    font-size: 1.18em;
 }
 
 .results > div {
@@ -390,49 +399,5 @@ button.search-btn {
 .results > div:nth-child(2n):hover {
     background: rgba(230, 230, 230, 0.171);
     border: solid 2px rgba(197, 197, 197, 0.63);
-}
-
-
-.kwic::before {
-    counter-increment: num;
-    content: counter(num) " ";
-    color: gray;
-    font-size: 0.7em;
-}
-.info {
-    text-align: left;
-}
-.info span,
-.info button {
-    display: inline-block;
-    margin: 5px 1.2em 5px 0;
-    padding: 6px 2px;
-    line-height: 0.75em;
-}
-.info span.num-of-results {
-    width: 15em;
-    font-size: 0.7em;
-}
-.num-of-results:before {
-    content: "總筆數：";
-}
-
-button {
-    background: rgb(87, 87, 87);
-    color: rgb(236, 236, 236);
-    padding: 4px;
-    margin: 5px;
-    border: none;
-}
-button:hover {
-    background: rgb(66, 66, 66);
-    color: white;
-}
-button:active {
-    transform: translateY(1px);
-}
-button:disabled {
-    background: rgb(136, 136, 136);
-    color: rgb(236, 236, 236);
 }
 </style>

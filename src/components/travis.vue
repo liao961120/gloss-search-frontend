@@ -1,10 +1,31 @@
 <template>
     <div>
-        <modal name="trigger-build" :width="350" :height="220" class="modal">
-            <div>
-                <h3>Request Data Update</h3>
-                <input type="password" v-model="build_psswd" placeholder="password"/>
-                <button v-on:click="triggerBuild">Request</button>
+        <modal 
+            name="trigger-build" 
+            :width="400" 
+            :height="260" 
+            class="modal-travis"
+            @before-open="beforeOpen"
+        >
+            <div class="header-travis">
+                <p class="text-h5 font-weight-black mt-3">Request Data Update</p>
+                <v-row align-content="center" justify="center" class="mb-0 pb-0">
+                    <v-col cols="7" class="pb-0">
+                        <v-text-field 
+                            v-model="build_psswd" 
+                            placeholder="password"
+                            :append-icon="showpassword ? 'mdi-eye' : 'mdi-eye-off'"
+                            :type="showpassword ? 'text' : 'password'"
+                            @click:append="showpassword = !showpassword"
+                            outlined
+                            dense
+                        />
+                    </v-col>
+                    <v-col cols="3" class="pb-0">
+                        <v-btn small dark class="px-10 my-1 ml-0" v-on:click="triggerBuild">Request</v-btn>
+                    </v-col>
+                </v-row>
+                
             </div>
             <div class="response">
                 <template v-if="response != ''">
@@ -18,12 +39,12 @@
                     </p>
                 </template>
             </div>
-            <span class="info">Check 
+            <span class="info-log ">Check 
                 <a href="https://yongfu.name/gloss-search/2020_Budai_Rukai.log" class="log" target="_blank">log</a>
                 if some of your glosses are missing
             </span>
         </modal>
-        <img v-on:click="showModal" id="travis-build-btn" alt="Update data" src="@/assets/travis.png">
+        <!-- <img v-on:click="showTravisModal" id="travis-build-btn" alt="Update data" src="@/assets/travis.png"> -->
     </div>
 </template>
 
@@ -34,15 +55,16 @@ export default {
             build_token:
                 "U2FsdGVkX186rIUOLx3trIsnkmYleS4UDoNUpf4nMbeGYW1V/tcNO2OjXoxNO2Vj",
             build_psswd: "",
-            response: ""
+            showpassword: false,
+            response: "",
         };
     },
     methods: {
-        showModal: function() {
-            this.$modal.show("trigger-build");
+        beforeOpen: function() {
             this.response = "";
             this.build_psswd = "";
         },
+
         triggerBuild: function() {
             const url =
                 "https://api.travis-ci.org/repo/liao961120%2Fgloss-search/requests";
@@ -82,21 +104,30 @@ export default {
 </script>
 
 <style scoped>
-.modal input, .modal button {
+.header-travis {
+    width: 85%;
+    margin: auto;
+    padding: auto;
+    text-align: center;
+}
+.header-travis > h3 {
+    margin-bottom: 10px;
+}
+.modal-travis input, .modal-travis button {
     display: inline-block;
 }
-.modal input {
+.modal-travis input {
     width: 40%;
     padding-left: 0.3em;
 }
-.modal button {
+.modal-travis button {
     width: 4.8em;
     margin-left: 15px;
 }
-.response {
-    margin-top: 20px;
+.modal-travis .response {
+    text-align: center;
     margin-bottom: 0;
-    font-size: 0.8em;
+    font-size: 1em;
     min-height: 85px;
 }
 #travis-build-btn {
@@ -104,12 +135,13 @@ export default {
     left: 1%;
     bottom: 1%;
     height: 1em;
+    z-index: 10;
 }
 #travis-build-btn:hover {
     cursor: pointer;
     height: 1.08em;
 }
-.info {
+.modal-travis .info-log {
     position: absolute;
     display: block;
     right: 1.7%;
@@ -117,15 +149,15 @@ export default {
     font-size: 0.58em;
     color: grey;
 }
-.log:hover {
+.modal-travis .log:hover {
     font-weight: bold;
     text-decoration: none;
 }
 
-.status {
+.modal-travis .status {
     width: 65%;
     padding: 10px 1%;
-    margin: 0 17.5% 0 17.5%;
+    margin: 0 auto;
     border: 1.2px solid rgba(128, 128, 128, 0.226);
     border-radius: 5px;
 }
