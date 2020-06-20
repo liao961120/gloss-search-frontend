@@ -12,7 +12,7 @@
                 </template>
             </template>
         </div>
-        <Travis v-if="database == 1"/>
+        <Travis v-if="database != 0"/>
 
         <!-- Top Menu bar -->
         <v-app-bar app color="blue-grey lighten-4" min-width="330">
@@ -66,7 +66,7 @@
                     ></v-switch>
                 </v-col>
 
-                <v-col class="mr-5 pr-5" cols="1">
+                <v-col class="mr-7 pr-5" cols="1">
                     <template v-if="database == 0">
                         <v-btn small fab v-on:click="searchGloss">
                             <v-badge
@@ -82,6 +82,8 @@
                     <template v-else>
                         <v-btn small fab>
                             <v-badge
+                                offset-x="8"
+                                offset-y="8"
                                 v-if="vue_seach_results.length > 0"
                                 color="green"
                                 :content="vue_seach_results.length"
@@ -94,6 +96,33 @@
                 </v-col>
             </v-row>
         </v-app-bar>
+
+        <!-- Bottom Menu bar for mobile -->
+        <v-bottom-navigation app grow height="54" color="blue-grey lighten-4" class="d-flex d-sm-none">
+            <span class="ml-0 mr-8" style="width:32%">
+                <v-select
+                    :items="querytypes"
+                    v-model="query.type"
+                    dense
+                    outlined
+                    label="Search Mode"
+                    class="mt-2 mx-0"
+                ></v-select>
+            </span>
+            <span class="mr-0" style="width:32%">
+                <v-switch
+                    v-model="query.regex"
+                    value="1"
+                    :true-value="1"
+                    :false-value="0"
+                    :label="(query.regex == '1' ? 'RegEx' : 'Exact')"
+                    inset dense
+                    color="success"
+                    class="mt-3"
+                ></v-switch>
+            </span>
+            <span></span>
+        </v-bottom-navigation>
 
         <!-- Left drawer -->
         <v-navigation-drawer width="268" v-model="drawer" app>
@@ -147,6 +176,15 @@
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title>Data Update</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
+                <v-list-item href="https://yongfu.name/gloss-search/2020_Budai_Rukai.log" target="_blank">
+                    <v-list-item-action>
+                        <v-icon>mdi-message-bulleted</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Format Check</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
 

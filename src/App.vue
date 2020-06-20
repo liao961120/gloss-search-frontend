@@ -47,6 +47,7 @@ a#to-bottom {
     background: rgb(121, 121, 121);
     color: rgb(245, 245, 245);
     font-size: 19px;
+    z-index: 10;
 }
 a#to-top:hover,
 a#to-bottom:hover {
