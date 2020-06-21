@@ -18,10 +18,10 @@
             <v-icon v-else>mdi-unfold-more-horizontal</v-icon>
           </v-btn>
         </template>
-          <v-btn color="pink" dark small fab onclick="window.scrollTo(0, document.body.scrollHeight);">
+          <v-btn color="light-blue darken-4" dark small fab onclick="window.scrollTo(0, document.body.scrollHeight);">
               <v-icon>mdi-chevron-down</v-icon>
           </v-btn>
-          <v-btn color="pink" dark small fab onclick="document.documentElement.scrollTop = 0;">
+          <v-btn color="light-blue darken-4" dark small fab onclick="document.documentElement.scrollTop = 0;">
               <v-icon>mdi-chevron-up</v-icon>
           </v-btn>
       </v-speed-dial>
@@ -48,26 +48,11 @@ html {
 textarea {
     font-family: "Monaco", "Courier New", Courier, monospace !important;
 }
-a#to-top,
-a#to-bottom {
-    position: fixed;
-    right: 0.6%;
-    background: rgb(121, 121, 121);
-    color: rgb(245, 245, 245);
-    font-size: 19px;
-    z-index: 10;
+/* Highlight matched gloss */
+span.matchedtoken {
+    background: rgba(255, 255, 0, 0.582);
 }
-a#to-top:hover,
-a#to-bottom:hover {
-    background: rgb(88, 88, 88);
-    color: white;
-    cursor: pointer;
-    user-select: none;
-}
-a#to-top {
-    bottom: 40px;
-}
-a#to-bottom {
-    bottom: 15px;
+.gloss__line--free span.matchedtoken {
+    background: rgba(136, 255, 0, 0.561);
 }
 </style>

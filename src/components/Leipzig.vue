@@ -1,12 +1,19 @@
 <template>
     <div>
         <span class="gloss-src src-num">{{ gloss.num }}</span>
-        <v-tooltip bottom color="rgba(255, 115, 133, 0.75)">
+        <v-tooltip bottom color="rgba(255, 115, 133, 0.85)">
             <template v-slot:activator="{ on, attrs }">
                 <span class="gloss-src src-doc" v-bind="attrs" v-on="on">{{ gloss.file }}</span>
             </template>
-            <span class="meta-modified"><strong>{{ gloss.meta.modified }}</strong></span><br>
-            <span class="meta-speaker"><strong>{{ gloss.meta.speaker }}</strong></span>
+            <span class="meta-modified" v-if="gloss.meta.modified">
+                <strong>{{ gloss.meta.modified }}</strong>
+            </span><br>
+            <span class="meta-speaker" v-if="gloss.meta.speaker">
+                <strong>{{ gloss.meta.speaker }}</strong>
+            </span><br>
+            <span class="meta-transcriber" v-if="gloss.meta.transcriber">
+                <strong>{{ gloss.meta.transcriber }}</strong>
+            </span>
         </v-tooltip>        
  
         <div class="example gloss--glossed">
@@ -41,6 +48,12 @@
             >
                 <span v-html="line"></span>
             </p>
+
+            <!-- Audio -->
+            <audio controls v-if="gloss.meta.audio != ''">
+                <source :src="gloss.meta.audio" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
         </div>
 
         <v-btn fab x-small dark color="blue-grey lighten-2" v-if="!showplaintext" class="copy-glass" v-on:click="toPlainText(gloss)">
@@ -160,13 +173,20 @@ export default {
 
 <style scoped>
 .meta-speaker::before {
-    content: "Speaker:	"
+    content: "Speaker: "
 }
 .meta-modified::before {
-    content: "Modified:	"
+    content: "Modified: "
 }
-.meta-modified::before, .meta-speaker::before {
-    color:rgba(255, 255, 255, 0.87);
+.meta-transcriber::before {
+    content: "Transcriber: "
+}
+.meta-modified::before, 
+.meta-speaker::before,
+.meta-transcriber::before {
+    display: inline-block;
+    min-width: 5.7em;
+    color:rgba(255, 255, 255, 0.88);
 }
 span.gloss-src {
     font-size: 0.75em;
@@ -272,5 +292,9 @@ ol.gloss--glossed li {
 .plain-text-gloss {
     display: block;
     width: 80%;
+}
+audio::-webkit-media-controls-panel, video::-webkit-media-controls-panel {
+    background-color: rgba(204, 204, 204, 0.781);
+    width: 35%;
 }
 </style>
