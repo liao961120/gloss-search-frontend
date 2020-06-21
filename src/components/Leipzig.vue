@@ -1,7 +1,14 @@
 <template>
     <div>
         <span class="gloss-src src-num">{{ gloss.num }}</span>
-        <span class="gloss-src src-doc">{{ gloss.file }}</span>
+        <v-tooltip bottom color="rgba(255, 115, 133, 0.75)">
+            <template v-slot:activator="{ on, attrs }">
+                <span class="gloss-src src-doc" v-bind="attrs" v-on="on">{{ gloss.file }}</span>
+            </template>
+            <span class="meta-modified"><strong>{{ gloss.meta.modified }}</strong></span><br>
+            <span class="meta-speaker"><strong>{{ gloss.meta.speaker }}</strong></span>
+        </v-tooltip>        
+ 
         <div class="example gloss--glossed">
             <p v-if="gloss.ori.length > 0" class="gloss__line--original gloss__line gloss__line--0">
                 <span v-html="ori_highlighted"></span>
@@ -143,26 +150,7 @@ export default {
     data() {
         return {
             plain_text_gloss: "",
-            //showplaintext: false
-            /*
-        gloss: {
-            'file': '20200325.docx',
-            'num': 1,
-            'ori': ['yakay', 'ku', 'tatulru', 'ku', 'ababay/sauvalay', 'ku', 'agili'],
-            'gloss': [
-                ('yakay', 'have', '有'),
-                ('ku', 'three', '3'),
-                ('tatulru', 'female/male', '女性/男性'),
-                ('(ku', 'yonger_brother/sister-1SG.POSS', '弟妹-我的.第一人稱單數.所有格'),
-                ('ababay/sauvalay)', '_', '_'),
-                ('ku', '_', '_'),
-                ('agi-li', '_', '_')],
-            'free': [
-                '#e I have 3 younger brother/sister',
-                '#c 我有 3 個弟弟/妹妹',
-                '#n  yakay\tku 可省略']
-            }
-        */
+            /* See https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json for data format*/
         };
     }
 };
@@ -171,6 +159,15 @@ export default {
 
 
 <style scoped>
+.meta-speaker::before {
+    content: "Speaker:	"
+}
+.meta-modified::before {
+    content: "Modified:	"
+}
+.meta-modified::before, .meta-speaker::before {
+    color:rgba(255, 255, 255, 0.87);
+}
 span.gloss-src {
     font-size: 0.75em;
 }

@@ -5,13 +5,19 @@
                 <h3>{{ word[0] }}</h3>
 
                 <ul>
-                    <li class="tooltip" v-for="(sense, j) in Object.keys(word[1])" :key="j + sense">
-                        {{ sense }}
-                        <span class="tooltiptext" v-html="word[1][sense].join('<br>')"></span>
-                    </li>
+                    <v-tooltip bottom color="rgba(255, 115, 133, 0.9)" v-for="(sense, j) in Object.keys(word[1])" :key="j + sense">
+                        <template v-slot:activator="{ on, attrs }">
+                            <li class="gloss-src src-doc" v-bind="attrs" v-on="on">{{ sense }}</li>
+                        </template>
+                        <template v-for="(s, k) in word[1][sense]">
+                            <span :key="k + 'span'" class="text-body-2"><b>{{ s }}</b></span>
+                            <br v-if="k < word[1][sense].length - 1" :key="k + 'br'">
+                        </template>
+                    </v-tooltip>   
                 </ul>
             </div>
         </div>
+        <Travis />
 
         <!-- Top Menu bar -->
         <v-app-bar app color="blue-grey lighten-4" min-width="330">
@@ -75,6 +81,37 @@
                     </v-list-item-content>
                 </v-list-item>
 
+                <v-divider></v-divider>
+                <v-subheader class="pb-0 mb-0">Gloss Data</v-subheader>
+
+                <v-list-item link v-on:click="showTravisModal">
+                    <v-list-item-action>
+                        <v-icon>mdi-update</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Data Update</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
+                <v-list-item>
+                    <v-list-item-action>
+                        <v-icon class="mb-6">mdi-database</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-select
+                            :items="databases"
+                            v-model="webdb_url"
+                            outlined
+                            dense
+                            class="ma-0"
+                            label="Database"
+                        ></v-select>
+                    </v-list-item-content>
+                </v-list-item>
+
+                <v-divider></v-divider>
+                <v-subheader class="pb-0 mb-0">External Links</v-subheader>
+
                 <v-list-item href="" target="_blank" >
                     <v-list-item-action>
                         <v-icon>mdi-text-box-multiple</v-icon>
@@ -84,33 +121,40 @@
                     </v-list-item-content>
                 </v-list-item>
 
-                <v-list-item>
+                <v-list-item href="https://yongfu.name/gloss-search/2020_Budai_Rukai.log" target="_blank">
                     <v-list-item-action>
-                        <v-icon>mdi-database-sync</v-icon>
+                        <v-icon>mdi-alert-decagram-outline</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
-                        <v-select
-                            :items="databases"
-                            v-model="webdb_url"
-                            outlined
-                            dense
-                            class="mt-6 px-0"
-                            label="Database"
-                        ></v-select>
+                        <v-list-item-title>Format Check</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+
+                <v-divider></v-divider>
             </v-list>
 
-        <v-footer absolute color="transparent" height="35" class="py-0">
-            <v-col
-                class="text-center text-caption text--secondary"
-                cols="12"
-            >
-                Maintained by
-                <a href="https://yongfu.name" target="_blank" class="blue-grey--text text-decoration-none font-weight-medium">
-                    Yongfu Liao
-                </a>
-            </v-col>
+        <v-footer fixed color="blue-grey lighten-5" height="37.5">
+            <v-row class="mt-n4">
+                <v-col cols="4">
+                    <v-btn icon color="light-green darken-2" href="https://github.com/liao961120/gloss-search/" target="_blank">
+                        <v-icon>mdi-github</v-icon>
+                    </v-btn>
+                </v-col>
+
+                <v-col cols="4">
+                    <v-btn icon color="deep-orange lighten-2" href="mailto:liao961120@gmail.com" target="_blank">
+                        <v-icon>mdi-email-outline</v-icon>
+                    </v-btn>
+                </v-col>
+
+                <v-col cols="4">
+                    <v-btn icon  href="https://yongfu.name"  target="_blank" color="pink">
+                        <v-avatar size="22">
+                            <img src="https://img.yongfu.name/icon/me-blackwhite.svg" alt="Yongfu">
+                        </v-avatar>
+                    </v-btn>
+                </v-col>
+            </v-row>
         </v-footer>
 
         </v-navigation-drawer>
@@ -119,49 +163,59 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                search: '',
-                words: [],
-                webdb_url: '',
-                drawer: null,
-                databases: [
-                    {
-                        text: "霧台魯凱 (2020)",
-                        value: "https://yongfu.name/gloss-search/2020_Budai_Rukai/glossary.json"
-                    }],
-            }
-        },
-        computed: {
-            filtered_words: function() {
-                if (this.search == '') return this.words 
-                var pat = RegExp(`${this.search}`);
+import Travis from "@/components/travis.vue";
 
-                if (this.words.length > 0)
-                    return this.words.filter(word => {
-                        return word[2].some( tk => pat.test(tk) );
-                    })
-                else 
-                    return this.words
-            },
-            search_lazy: {
-                get() {
-                    return this.search;
-                },
-                set(v) {
-                    this.search = v;
-                }
-            },
+export default {
+    components: {
+            Travis,
+    },
+    data() {
+        return {
+            search: '',
+            words: [],
+            webdb_url: '',
+            drawer: null,
+            databases: [
+                {
+                    text: "霧台魯凱 (2020)",
+                    value: "https://yongfu.name/gloss-search/2020_Budai_Rukai/glossary.json"
+                }],
+        }
+    },
+    computed: {
+        filtered_words: function() {
+            if (this.search == '') return this.words 
+            var pat = RegExp(`${this.search}`);
+
+            if (this.words.length > 0)
+                return this.words.filter(word => {
+                    return word[2].some( tk => pat.test(tk) );
+                })
+            else 
+                return this.words
         },
-        watch: {
-            webdb_url: function() {
-                this.$http.get(this.webdb_url).then(function(data) {
-                    this.words = data.body;
-                });
+        search_lazy: {
+            get() {
+                return this.search;
+            },
+            set(v) {
+                this.search = v;
             }
         },
-    }
+    },
+    methods: {
+        showTravisModal: function() {
+            this.$modal.show("trigger-build");
+        },
+    },
+    watch: {
+        webdb_url: function() {
+            this.$http.get(this.webdb_url).then(function(data) {
+                this.words = data.body;
+            });
+        }
+    },
+}
 </script>
 
 <style scoped>
@@ -184,32 +238,6 @@ input.word-filter {
     font-size: 0.75em;
     padding-left: 0.1em;
     font-family: Monaco, "Courier New", Courier, monospace;
-}
-
-/* Tooltip container */
-.tooltip {
-  position: relative;
-  /*display: inline-block;*/
-}
-
-/* Tooltip text */
-.tooltip .tooltiptext {
-  visibility: hidden;
-  background-color: #595959;
-  color: #fff;
-  text-align: center;
-  padding: 5px 6px;
-  border-radius: 6px;
-  font-size: 0.75em;
- 
-  /* Position the tooltip text - see examples below! */
-  position: absolute;
-  z-index: 1;
-}
-
-/* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
-  visibility: visible;
 }
 
 ul {
