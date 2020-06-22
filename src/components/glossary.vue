@@ -112,7 +112,7 @@
                 <v-divider></v-divider>
                 <v-subheader class="pb-0 mb-0">External Links</v-subheader>
 
-                <v-list-item href="" target="_blank" >
+                <v-list-item href="https://yongfu.name/docs-gloss-search" target="_blank" >
                     <v-list-item-action>
                         <v-icon>mdi-text-box-multiple</v-icon>
                     </v-list-item-action>
