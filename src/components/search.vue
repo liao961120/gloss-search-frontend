@@ -34,7 +34,8 @@
                     <v-text-field
                         spellcheck="false"
                         placeholder="docx filter"
-                        v-model.lazy="docfilter"
+                        :value="docfilter_lazy"
+                        @change="v => docfilter_lazy = v"
                         outlined
                         dense
                         class="mt-6"
@@ -295,6 +296,14 @@ export default {
             },
             set(v) {
                 this.query.query = v;
+            }
+        },
+        docfilter_lazy: {
+            get() {
+                return this.docfilter;
+            },
+            set(v) {
+                this.docfilter = v;
             }
         },
         filtered_results: function() {
