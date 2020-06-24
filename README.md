@@ -1,14 +1,12 @@
-# gloss-search
+# Gloss Search (南島語料搜尋)
 
 Searcing interlinear glosses, and all you need is a web browser!
 
-![Demo](https://img.yongfu.name/gif/gloss-search-min.gif)
+![Demo](https://yongfu.name/docs-gloss-search/_media/UI-search-mode.gif)
 
-## Usage
 
-Below describe the usage of the fontend (with data hosted online). To search your own data (i.e. data on your PC), see [`liao961120/gloss-search-backend`](https://github.com/liao961120/gloss-search-backend).
+[Documentation](https://yongfu.name/docs-gloss-search)
 
-Will be available soon!
 
 ## Features
 
