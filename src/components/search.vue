@@ -12,7 +12,7 @@
                 </template>
             </template>
         </div>
-        <v-btn v-if="infscroll > 60" @click="infscroll += 15;" :disabled="vue_seach_results.length <= infscroll" small>Show More</v-btn>
+        <v-btn v-if="infscroll > 60" @click="infscroll += 15;" :disabled="vue_seach_results.length <= infscroll" x-small>Show More</v-btn>
         <Travis/>
 
         <!-- Top Menu bar -->
