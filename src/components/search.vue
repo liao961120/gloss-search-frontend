@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-scroll="handleScroll">
         <div class="results">
             <template v-if="database == 0">
                 <template v-for="(res, i) in filtered_results">
@@ -7,11 +7,12 @@
                 </template>
             </template>
             <template v-else>
-                <template v-for="(res, i) in vue_seach_results">
+                <template v-for="(res, i) in vue_seach_results_lazy">
                     <Leipzig v-bind:gloss="res" v-bind:query="query" v-bind:showplaintext="false" :key="i" />
                 </template>
             </template>
         </div>
+        <v-btn v-if="infscroll > 60" @click="infscroll += 15;" :disabled="vue_seach_results.length <= infscroll" small>Show More</v-btn>
         <Travis/>
 
         <!-- Top Menu bar -->
@@ -286,7 +287,8 @@ export default {
             },
             database: "https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json",
             results: [],
-            docfilter: ""
+            docfilter: "",
+            infscroll: 15,
         };
     },
     computed: {
@@ -392,6 +394,10 @@ export default {
             }
 
             return search_results;
+        },
+
+        vue_seach_results_lazy: function() {
+            return this.vue_seach_results.slice(0, this.infscroll);
         }
     },
     created: function() {
@@ -408,6 +414,10 @@ export default {
             } else {
                 this.results = [];
             }
+        },
+        "query.query": function() {
+            this.infscroll = 15;
+            document.documentElement.scrollTop = 0;
         }
     },
     methods: {
@@ -421,6 +431,11 @@ export default {
         },
         showTravisModal: function() {
             this.$modal.show("trigger-build");
+        },
+
+        handleScroll: function() {
+            if ((window.innerHeight + window.scrollY + 100) >= document.body.offsetHeight)
+                this.infscroll += 30;
         },
     }
 };
