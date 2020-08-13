@@ -323,7 +323,7 @@ export default {
             if (this.query.query.trim() == "") return []; //this.results; //
 
             const results = this.filtered_results;
-            const search_pats = this.query.query.trim().split(/\s*,\s*/);
+            const search_pats = this.query.query.trim().split(/\s*&&\s*/);
             const search_pats_regex = search_pats.map(x => RegExp(x));
 
             var search_results = [];

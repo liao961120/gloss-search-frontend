@@ -3,7 +3,7 @@
 // For Leipzig.vue
 export class Highlight {
     static highlight(tk, query, isRegex) {
-        var query_arr = query.split(',').map(x => x.trim());
+        var query_arr = query.split(/\s*&&\s*/).map(x => x.trim());
         
         // RegEx search
         if (isRegex) {
