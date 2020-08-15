@@ -434,8 +434,10 @@ export default {
         },
 
         handleScroll: function() {
-            if ((window.innerHeight + window.scrollY + 100) >= document.body.offsetHeight)
-                this.infscroll += 30;
+            if (this.vue_seach_results_lazy.length < this.vue_seach_results.length) {
+                if ((window.innerHeight + window.scrollY + 100) >= document.body.offsetHeight)
+                    this.infscroll += 30;
+            }
         },
     }
 };
