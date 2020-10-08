@@ -177,9 +177,14 @@ export default {
             drawer: null,
             databases: [
                 {
+                    text: "Kanakanavu",
+                    value: "https://yongfu.name/temp-data/kanakanavu-glossary.json"
+                },
+                {
                     text: "霧台魯凱 (2020)",
                     value: "https://yongfu.name/gloss-search/2020_Budai_Rukai/glossary.json"
-                }],
+                },
+                ],
         }
     },
     computed: {
