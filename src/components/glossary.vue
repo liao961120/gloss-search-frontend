@@ -181,6 +181,10 @@ export default {
                     value: "https://yongfu.name/temp-data/kanakanavu-glossary.json"
                 },
                 {
+                    text: "Long Texts",
+                    value: "https://yongfu.name/temp-data/all_lang-long-text-glossary.json"
+                },
+                {
                     text: "霧台魯凱 (2020)",
                     value: "https://yongfu.name/gloss-search/2020_Budai_Rukai/glossary.json"
                 },
