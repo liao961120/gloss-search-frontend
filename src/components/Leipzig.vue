@@ -50,7 +50,7 @@
             </p>
 
             <!-- Audio -->
-            <audio controls v-if="gloss.meta.audio != ''">
+            <audio controls v-if="'audio' in gloss.meta & gloss.meta.audio != ''">
                 <source :src="gloss.meta.audio" type="audio/mpeg">
                 Your browser does not support the audio element.
             </audio>
