@@ -5,15 +5,12 @@
             <template v-slot:activator="{ on, attrs }">
                 <span class="gloss-src src-doc" v-bind="attrs" v-on="on">{{ gloss.file }}</span>
             </template>
-            <span class="meta-modified" v-if="gloss.meta.modified">
-                <strong>{{ gloss.meta.modified }}</strong>
-            </span><br>
-            <span class="meta-speaker" v-if="gloss.meta.speaker">
-                <strong>{{ gloss.meta.speaker }}</strong>
-            </span><br>
-            <span class="meta-transcriber" v-if="gloss.meta.transcriber">
-                <strong>{{ gloss.meta.transcriber }}</strong>
-            </span>
+
+            <template v-for="(value, name) in gloss.meta">
+                <span v-if="value != ''" class="meta" :key="value + name">
+                    <span style="display:inline-block; width:4.5em;">{{ name }}:</span> <strong>{{ value }}</strong><br>
+                </span>
+            </template>
         </v-tooltip>        
  
         <div class="example gloss--glossed">
@@ -172,22 +169,6 @@ export default {
 
 
 <style scoped>
-.meta-speaker::before {
-    content: "Speaker: "
-}
-.meta-modified::before {
-    content: "Modified: "
-}
-.meta-transcriber::before {
-    content: "Transcriber: "
-}
-.meta-modified::before, 
-.meta-speaker::before,
-.meta-transcriber::before {
-    display: inline-block;
-    min-width: 5.7em;
-    color:rgba(255, 255, 255, 0.88);
-}
 span.gloss-src {
     font-size: 0.75em;
 }
