@@ -7,8 +7,10 @@
             </template>
 
             <template v-for="(value, name) in gloss.meta">
-                <span v-if="value != ''" class="meta" :key="value + name">
-                    <span style="display:inline-block; width:4.5em;">{{ name }}:</span> <strong>{{ value }}</strong><br>
+                <span v-if="value!='' & value!='None'" class="meta" :key="value + name">
+                    <span style="display:inline-block; min-width:5.5em;">{{ name }}:</span>
+                    <strong style="display:inline-block">{{ value }}</strong>
+                    <br>
                 </span>
             </template>
         </v-tooltip>        
