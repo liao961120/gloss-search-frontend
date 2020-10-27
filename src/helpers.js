@@ -19,8 +19,8 @@ export class Highlight {
         } else {
             for (var j=0; j<query_arr.length; j++) {
                 if (tk.includes(query_arr[j])) {
-                    var regex2 = RegExp(`(${query_arr[j]})`, "g");
-                    tk = tk.replace(regex2, myReplace);
+                    // var regex2 = RegExp(`(${query_arr[j]})`, "g");
+                    tk = tk.replace(query_arr[j], myReplace2);
                     break
                 }
             }
@@ -28,11 +28,10 @@ export class Highlight {
 
         return tk
     }
-
-    static myReplace(str, group1) {
-        return "<span class='matchedtoken'>" + group1 + "</span>"
-    }
 }
 function myReplace(str, group1) {
     return "<span class='matchedtoken'>" + group1 + "</span>"
+}
+function myReplace2(str) {
+    return "<span class='matchedtoken'>" + str + "</span>"
 }

@@ -329,10 +329,17 @@ export default {
 
         vue_seach_results: function() {
             if (this.query.query.trim() == "") return []; //this.results; //
+            // Check regex validity
+            if (this.query.regex == 1) {
+                try {new RegExp(this.query.query.trim());}
+                catch(e) {return []}
+            }
 
             const results = this.filtered_results;
-            const search_pats = this.query.query.trim().split(/\s*&&\s*/);
-            const search_pats_regex = search_pats.map(x => RegExp(x));
+            var search_pats = this.query.query.trim().split(/\s*&&\s*/);
+            if (this.query.regex == 1) {
+                search_pats = search_pats.map(x => RegExp(x));
+            }
 
             var search_results = [];
             for (var i = 0; i < results.length; i++) {
@@ -353,24 +360,25 @@ export default {
                     }
                     // Regex search
                     else {
-                        if (search_pats_regex[0].test(ori_str))
+                        if (search_pats[0].test(ori_str))
                             search_results.push(results[i]);
                     }
 
-                    // Seach Gloss
+                // Seach Gloss
                 } else if (this.query.type == "gloss") {
                     var matchNum = 0;
                     for (let j = 0; j < search_pats.length; j++) {
                         // Exact search
                         if (this.query.regex == 0) {
                             let isMatch = gloss_content.some(
-                                tk => tk == search_pats[j]
+                                //tk => tk == search_pats[j]
+                                tk => tk.includes(search_pats[j])
                             );
                             if (isMatch) matchNum++;
-                            // Regex search
+                        // Regex search
                         } else {
                             let isMatch = gloss_content.some(tk =>
-                                search_pats_regex[j].test(tk)
+                                search_pats[j].test(tk)
                             );
                             if (isMatch) matchNum++;
                         }
@@ -378,7 +386,7 @@ export default {
                     if (matchNum == search_pats.length)
                         search_results.push(results[i]);
 
-                    // Search Notes
+                // Search Notes
                 } else {
                     // Free line contents
                     var free_content = results[i].free.join(" "); // a string
@@ -389,10 +397,10 @@ export default {
                             search_pats.every(pat => free_content.includes(pat))
                         )
                             search_results.push(results[i]);
-                        // Regex search
+                    // Regex search
                     } else {
                         if (
-                            search_pats_regex.every(pat =>
+                            search_pats.every(pat =>
                                 pat.test(free_content)
                             )
                         )
