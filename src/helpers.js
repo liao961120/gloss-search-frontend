@@ -19,7 +19,6 @@ export class Highlight {
         } else {
             for (var j=0; j<query_arr.length; j++) {
                 if (tk.includes(query_arr[j])) {
-                    // var regex2 = RegExp(`(${query_arr[j]})`, "g");
                     tk = tk.replace(query_arr[j], myReplace2);
                     break
                 }
