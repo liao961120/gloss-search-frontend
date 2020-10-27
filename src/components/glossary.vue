@@ -182,7 +182,7 @@ export default {
                 },
                 {
                     text: "Long Texts",
-                    value: "https://yongfu.name/temp-data/all_lang-long-text-glossary.json"
+                    value: "https://yongfu.name/glossParser/all_lang-long-text-glossary.json"
                 },
                 {
                     text: "霧台魯凱 (2020)",
