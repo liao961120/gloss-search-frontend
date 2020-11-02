@@ -181,7 +181,7 @@ export default {
                     value: "https://yongfu.name/temp-data/kanakanavu-glossary.json"
                 },
                 {
-                    text: "Long Texts",
+                    text: "Seediq",
                     value: "https://yongfu.name/glossParser/seediq-long-text-glossary.json"
                 },
                 {
