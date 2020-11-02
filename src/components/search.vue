@@ -262,6 +262,10 @@ export default {
                     value: "https://yongfu.name/temp-data/kanakanavu.json"
                 },
                 {
+                    text: "Seediq",
+                    value: "https://yongfu.name/glossParser/seediq-long-text.json"
+                },
+                {
                     text: "Long Texts",
                     value: "https://yongfu.name/glossParser/all_lang-long-text.json"
                 },

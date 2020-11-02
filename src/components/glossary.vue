@@ -182,6 +182,10 @@ export default {
                 },
                 {
                     text: "Long Texts",
+                    value: "https://yongfu.name/glossParser/seediq-long-text-glossary.json"
+                },
+                {
+                    text: "Long Texts",
                     value: "https://yongfu.name/glossParser/all_lang-long-text-glossary.json"
                 },
                 {

@@ -29,8 +29,8 @@ export class Highlight {
     }
 }
 function myReplace(str, group1) {
-    return "<span class='matchedtoken'>" + group1 + "</span>"
+    return "<span class='matchedtoken'>" + group1.replace('<', '&lt;').replace('>', '&gt;') + "</span>"
 }
 function myReplace2(str) {
-    return "<span class='matchedtoken'>" + str + "</span>"
+    return "<span class='matchedtoken'>" + str.replace('<', '&lt;').replace('>', '&gt;') + "</span>"
 }
