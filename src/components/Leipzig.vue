@@ -80,41 +80,45 @@ import { Highlight } from "@/helpers.js";
 export default {
     computed: {
         ori_highlighted() {
+            var query_str = this.query.query.replace('<', '&lt;').replace('>', '&gt;');
+
             if (this.query.type == "gloss")
                 return this.gloss.ori
                     .map(tk =>
                         Highlight.highlight(
-                            tk,
-                            this.query.query,
+                            tk.replace('<', '&lt;').replace('>', '&gt;'),
+                            query_str,
                             this.query.regex
                         )
                     )
                     .join(" ");
             else if (this.query.type == "ori")
                 return Highlight.highlight(
-                    this.gloss.ori.join(" "),
-                    this.query.query,
+                    this.gloss.ori.replace('<', '&lt;').replace('>', '&gt;').join(" "),
+                    query_str,
                     this.query.regex
                 );
             else return this.gloss.ori.join(" ");
         },
 
         gloss_hightlighted() {
+            var query_str = this.query.query.replace('<', '&lt;').replace('>', '&gt;');
+
             if (this.query.type == "gloss")
                 return this.gloss.gloss.map(tup => [
                     Highlight.highlight(
-                        tup[0],
-                        this.query.query,
+                        tup[0].replace('<', '&lt;').replace('>', '&gt;'),
+                        query_str,
                         this.query.regex
                     ),
                     Highlight.highlight(
-                        tup[1],
-                        this.query.query,
+                        tup[1].replace('<', '&lt;').replace('>', '&gt;'),
+                        query_str,
                         this.query.regex
                     ),
                     Highlight.highlight(
-                        tup[2],
-                        this.query.query,
+                        tup[2].replace('<', '&lt;').replace('>', '&gt;'),
+                        query_str,
                         this.query.regex
                     )
                 ]);
@@ -126,8 +130,8 @@ export default {
             if (this.query.type == "free")
                 return this.gloss.free.map(sent =>
                     Highlight.highlight(
-                        sent,
-                        this.query.query,
+                        sent.replace('<', '&lt;').replace('>', '&gt;'),
+                        this.query.query.replace('<', '&lt;').replace('>', '&gt;'),
                         this.query.regex
                     )
                 );
