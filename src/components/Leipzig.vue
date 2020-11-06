@@ -48,9 +48,14 @@
                 <span v-html="line"></span>
             </p>
 
-            <!-- Audio -->
-            <audio controls v-if="'audio' in gloss.meta & gloss.meta.audio != ''">
-                <source :src="gloss.meta.audio" type="audio/mpeg">
+            <!-- Audio: Lagacy for playing audio from Google Drive 
+                <audio controls v-if="'audio' in gloss.meta & gloss.meta.audio != ''">
+                    <source :src="gloss.meta.audio" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            -->
+            <audio controls v-if="'video' in gloss.meta & gloss.iu_a_span[0] != null & gloss.iu_a_span[1] != null">
+                <source :src="get_audio_url_by_split_time(gloss.iu_a_span[0], gloss.iu_a_span[1], gloss.meta.video)" type="audio/mpeg">
                 Your browser does not support the audio element.
             </audio>
         </div>
@@ -159,6 +164,14 @@ export default {
 
             this.plain_text_gloss = `${ori}${ori_align}${eng_align}${ch_align}${en_free}${ch_free}`;
             this.showplaintext = true;
+        },
+
+        get_audio_url_by_split_time(start_time, end_time, ori_audio) {
+            const baseURL = 'https://yongfu.name/FormCorp-audio/split';
+            const start = (start_time % 1 == 0) ? start_time + ".0" : start_time.toString();
+            const end = (end_time % 1 == 0) ? end_time + ".0" : end_time.toString();
+            
+            return `${baseURL}/${ori_audio.replace(".mp3", "")}_${start}-${end}.mp3`;
         }
     },
     filters: {},
