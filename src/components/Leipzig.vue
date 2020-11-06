@@ -83,6 +83,14 @@
 import { Highlight } from "@/helpers.js";
 
 export default {
+    props: ["gloss", "query", "showplaintext"],
+    data() {
+        return {
+            audio_url: "https://yongfu.name/FormCorp-audio/split",  // no slash at end
+            plain_text_gloss: "",
+            /* See https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json for data format*/
+        };
+    },
     computed: {
         ori_highlighted() {
             var query_str = this.query.query;
@@ -146,7 +154,9 @@ export default {
     methods: {
         toPlainText(gloss) {
             const ori =
-                gloss.ori.length > 0 ? gloss.ori.join(" ") + "\n\n" : "";
+                gloss.ori.length > 0 
+                    ? gloss.ori.join(" ") + "\n\n" 
+                    : "";
             const ori_align =
                 gloss.gloss.length > 0
                     ? gloss.gloss.map(x => x[0]).join("\t") + "\n"
@@ -167,21 +177,11 @@ export default {
         },
 
         get_audio_url_by_split_time(start_time, end_time, ori_audio) {
-            const baseURL = 'https://yongfu.name/FormCorp-audio/split';
             const start = (start_time % 1 == 0) ? start_time + ".0" : start_time.toString();
             const end = (end_time % 1 == 0) ? end_time + ".0" : end_time.toString();
-            
-            return `${baseURL}/${ori_audio.replace(".mp3", "")}_${start}-${end}.mp3`;
+            return `${this.audio_url}/${ori_audio.replace(".mp3", "")}_${start}-${end}.mp3`;
         }
     },
-    filters: {},
-    props: ["gloss", "query", "showplaintext"],
-    data() {
-        return {
-            plain_text_gloss: "",
-            /* See https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json for data format*/
-        };
-    }
 };
 </script>
 
