@@ -86,7 +86,7 @@ export default {
     props: ["gloss", "query", "showplaintext"],
     data() {
         return {
-            audio_url: "https://yongfu.name/FormCorp-audio/split",  // no slash at end
+            audio_url: "https://yongfu.name/FormCorp-audio",  // no slash at end
             plain_text_gloss: "",
             /* See https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json for data format*/
         };
