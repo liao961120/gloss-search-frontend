@@ -48,16 +48,17 @@
                 <span v-html="line"></span>
             </p>
 
-            <!-- Audio: Lagacy for playing audio from Google Drive 
-                <audio controls v-if="'audio' in gloss.meta & gloss.meta.audio != ''">
-                    <source :src="gloss.meta.audio" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                </audio>
-            -->
-            <audio controls v-if="'video' in gloss.meta & gloss.iu_a_span[0] != null & gloss.iu_a_span[1] != null">
-                <source :src="get_audio_url_by_split_time(gloss.iu_a_span[0], gloss.iu_a_span[1], gloss.meta.video)" type="audio/mpeg">
+            <!-- Audio: Lagacy for playing audio from Google Drive -->
+            <audio controls v-if="'audio' in gloss.meta & gloss.meta.audio != ''">
+                <source :src="gloss.meta.audio" type="audio/mpeg">
                 Your browser does not support the audio element.
             </audio>
+            <template v-if="'video' in gloss.meta">
+                <audio controls v-if="gloss.iu_a_span[0] != null & gloss.iu_a_span[1] != null">
+                    <source :src="get_audio_url_by_split_time(gloss.iu_a_span[0], gloss.iu_a_span[1], gloss.meta.video)" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </template>
         </div>
 
         <v-btn fab x-small dark color="blue-grey lighten-2" v-if="!showplaintext" class="copy-glass" v-on:click="toPlainText(gloss)">
