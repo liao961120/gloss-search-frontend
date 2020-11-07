@@ -1,6 +1,6 @@
 <template>
     <div v-scroll="handleScroll">
-        <div class="results">
+        <div class="results" :key="search_results_key">
             <template v-if="database == 0">
                 <template v-for="(res, i) in filtered_results">
                     <Leipzig v-bind:gloss="res" v-bind:query="query" :key="i" />
@@ -255,6 +255,7 @@ export default {
     data() {
         return {
             travis: false,
+            search_results_key: 0,
             drawer: null,
             databases: [
                 {
@@ -436,6 +437,7 @@ export default {
             }
         },
         "query.query": function() {
+            this.forceReload();
             this.infscroll = 15;
             document.documentElement.scrollTop = 0;
         }
@@ -459,6 +461,10 @@ export default {
                     this.infscroll += 30;
             }
         },
+
+        forceReload: function() {
+            this.search_results_key += 1;
+        }
     }
 };
 </script>
