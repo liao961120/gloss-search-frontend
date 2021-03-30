@@ -475,7 +475,7 @@ export default {
         db: this.database,
       }
       document.execCommand("copy");
-      return `${baseURL}#/?query=${p.q}&regex=${p.r}&type=${p.t}&filter=${p.f}&db=${p.db}`;
+      return `${baseURL}#${this.$route.path}?query=${p.q}&regex=${p.r}&type=${p.t}&filter=${p.f}&db=${p.db}`;
     }
   },
   created: function () {
