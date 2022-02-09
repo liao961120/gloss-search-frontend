@@ -240,7 +240,7 @@
         </v-list-item>
 
         <v-list-item
-          href="https://yongfu.name/gloss-search/2020_Budai_Rukai.log"
+          href="https://yongfu.name/gloss-search/2022_LANG.log"
           target="_blank"
         >
           <v-list-item-action>
@@ -313,6 +313,10 @@ export default {
       drawer: null,
       databases: [
         {
+          text: "???? (2022)",
+          value: "https://yongfu.name/gloss-search/2022_LANG/data.json",
+        },
+        {
           text: "Kanakanavu",
           value: "https://yongfu.name/temp-data/kanakanavu.json",
         },
@@ -352,7 +356,7 @@ export default {
         regex: (this.$route.query.regex) ? this.$route.query.regex : 1,
         type: (this.$route.query.type) ? this.$route.query.type : "gloss",
       },
-      database: (this.$route.query.db) ? this.$route.query.db : "https://yongfu.name/temp-data/kanakanavu.json", //"https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json",
+      database: (this.$route.query.db) ? this.$route.query.db : "https://yongfu.name/gloss-search/2022_LANG/data.json", //"https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json",
       results: [],
       docfilter: (this.$route.query.filter) ? this.$route.query.filter : "",
       infscroll: 15,

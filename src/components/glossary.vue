@@ -30,7 +30,7 @@
                     <v-col cols="8" align-self="center">
                         <v-text-field
                             spellcheck="false"
-                            placeholder="Enter anything (words, definitions, or translations)"
+                            placeholder="Type in anything (words, definitions, or translations)"
                             :value="search_lazy"
                             @change="v => search_lazy = v"
                             outlined
@@ -176,6 +176,10 @@ export default {
             webdb_url: '',
             drawer: null,
             databases: [
+                {
+                    text: "???? (2022)",
+                    value: "https://yongfu.name/gloss-search/2022_LANG/glossary.json"
+                },
                 {
                     text: "Kanakanavu",
                     value: "https://yongfu.name/temp-data/kanakanavu-glossary.json"
