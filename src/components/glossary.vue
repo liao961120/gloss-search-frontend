@@ -173,29 +173,29 @@ export default {
         return {
             search: '',
             words: [],
-            webdb_url: '',
+            webdb_url: 'https://yongfu.name/gloss-search/2022/glossary.json',
             drawer: null,
             databases: [
                 {
-                    text: "???? (2022)",
-                    value: "https://yongfu.name/gloss-search/2022_LANG/glossary.json"
-                },
-                {
-                    text: "Kanakanavu",
-                    value: "https://yongfu.name/temp-data/kanakanavu-glossary.json"
-                },
-                {
-                    text: "Seediq",
-                    value: "https://yongfu.name/glossParser/seediq-long-text-glossary.json"
-                },
-                {
-                    text: "Long Texts",
-                    value: "https://yongfu.name/glossParser/all_lang-long-text-glossary.json"
+                    text: "敬請期待 (2022)",
+                    value: "https://yongfu.name/gloss-search/2022/glossary.json"
                 },
                 {
                     text: "霧台魯凱 (2020)",
                     value: "https://yongfu.name/gloss-search/2020_Budai_Rukai/glossary.json"
                 },
+                // {
+                //     text: "Kanakanavu",
+                //     value: "https://yongfu.name/temp-data/kanakanavu-glossary.json"
+                // },
+                // {
+                //     text: "Seediq",
+                //     value: "https://yongfu.name/glossParser/seediq-long-text-glossary.json"
+                // },
+                // {
+                //     text: "Long Texts",
+                //     value: "https://yongfu.name/glossParser/all_lang-long-text-glossary.json"
+                // },
                 ],
         }
     },

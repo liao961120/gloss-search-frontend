@@ -40,7 +40,7 @@
                 </template>
             </div>
             <span class="info-log ">Check 
-                <a href="https://yongfu.name/gloss-search/2022_LANG.log" class="log" target="_blank">log</a>
+                <a href="https://yongfu.name/gloss-search/2022.log" class="log" target="_blank">log</a>
                 if some of your glosses are missing
             </span>
         </modal>

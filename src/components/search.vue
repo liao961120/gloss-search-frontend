@@ -240,7 +240,7 @@
         </v-list-item>
 
         <v-list-item
-          href="https://yongfu.name/gloss-search/2022_LANG.log"
+          href="https://yongfu.name/gloss-search/2022.log"
           target="_blank"
         >
           <v-list-item-action>
@@ -313,25 +313,25 @@ export default {
       drawer: null,
       databases: [
         {
-          text: "???? (2022)",
-          value: "https://yongfu.name/gloss-search/2022_LANG/data.json",
-        },
-        {
-          text: "Kanakanavu",
-          value: "https://yongfu.name/temp-data/kanakanavu.json",
-        },
-        {
-          text: "Seediq",
-          value: "https://yongfu.name/glossParser/seediq-long-text.json",
-        },
-        {
-          text: "Long Texts",
-          value: "https://yongfu.name/glossParser/all_lang-long-text.json",
+          text: "敬請期待 (2022)",
+          value: "https://yongfu.name/gloss-search/2022/data.json",
         },
         {
           text: "霧台魯凱 (2020)",
           value: "https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json",
         },
+        // {
+        //   text: "Kanakanavu",
+        //   value: "https://yongfu.name/temp-data/kanakanavu.json",
+        // },
+        // {
+        //   text: "Seediq",
+        //   value: "https://yongfu.name/glossParser/seediq-long-text.json",
+        // },
+        // {
+        //   text: "Long Texts",
+        //   value: "https://yongfu.name/glossParser/all_lang-long-text.json",
+        // },
         {
           text: "Local",
           value: 0, // Must be set to 0 for Vue logic
@@ -356,7 +356,7 @@ export default {
         regex: (this.$route.query.regex) ? this.$route.query.regex : 1,
         type: (this.$route.query.type) ? this.$route.query.type : "gloss",
       },
-      database: (this.$route.query.db) ? this.$route.query.db : "https://yongfu.name/gloss-search/2022_LANG/data.json", //"https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json",
+      database: (this.$route.query.db) ? this.$route.query.db : "https://yongfu.name/gloss-search/2022/data.json", //"https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json",
       results: [],
       docfilter: (this.$route.query.filter) ? this.$route.query.filter : "",
       infscroll: 15,
