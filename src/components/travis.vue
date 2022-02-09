@@ -29,7 +29,7 @@
             </div>
             <div class="response">
                 <template v-if="response != ''">
-                    <p class="status" v-if="response.status == 202">
+                    <p class="status" v-if="response.status == 204">
                         <b style="color:blue;">Success</b>! <br> 
                         Processing, wait 3 minutes! <br>
                     </p>
@@ -40,7 +40,7 @@
                 </template>
             </div>
             <span class="info-log ">Check 
-                <a href="https://yongfu.name/gloss-search/2020_Budai_Rukai.log" class="log" target="_blank">log</a>
+                <a href="https://yongfu.name/gloss-search/2022_LANG.log" class="log" target="_blank">log</a>
                 if some of your glosses are missing
             </span>
         </modal>
@@ -53,8 +53,9 @@ export default {
     data() {
         return {
             build_token:
-                "U2FsdGVkX186rIUOLx3trIsnkmYleS4UDoNUpf4nMbeGYW1V/tcNO2OjXoxNO2Vj",
+                "U2FsdGVkX1+kgOrUX4MUAH3G8fhm7elXllqrwK3zFGfACmu1U68oedl54d0njda29hGQ4bmWYk+PJaL+VQpJUA==",
             build_psswd: "",
+            target: "gloss-search",
             showpassword: false,
             response: "",
         };
@@ -65,14 +66,11 @@ export default {
             this.build_psswd = "";
         },
 
-        triggerBuild: function() {
+        triggerBuild: function () {
             const url =
-                "https://api.travis-ci.org/repo/liao961120%2Fgloss-search/requests";
+                `https://api.github.com/repos/liao961120/${this.target}/dispatches`;
             const body = {
-                request: {
-                    branch: "master",
-                    message: "Trigger build from glosss.yongfu.name"
-                }
+                event_type: "Trigger build from API"
             };
             const decryptedText = this.CryptoJS.AES.decrypt(
                 this.build_token,
@@ -81,19 +79,18 @@ export default {
             const header = {
                 "Content-Type": "application/json",
                 Accept: "application/json",
-                "Travis-API-Version": "3",
-                Authorization: `token ${decryptedText}`
+                Authorization: `token ${decryptedText}`,
+                
             };
-
             this.$http.post(`${url}`, body, { headers: header }).then(
-                response => {
+                (response) => {
                     this.response = response;
                 },
-                response => {
+                (response) => {
                     this.response = response;
                 }
             );
-        }
+        },
     },
     watch: {
         build_psswd: function() {
