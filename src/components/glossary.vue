@@ -225,6 +225,11 @@ export default {
             this.$modal.show("trigger-build");
         },
     },
+    created: function () {
+            this.$http.get(this.webdb_url).then(function(data) {
+                this.words = data.body;
+        });
+    },
     watch: {
         webdb_url: function() {
             this.$http.get(this.webdb_url).then(function(data) {
