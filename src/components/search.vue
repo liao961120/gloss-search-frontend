@@ -311,32 +311,8 @@ export default {
       travis: false,
       search_results_key: 0,
       drawer: null,
-      databases: [
-        {
-          text: "敬請期待 (2022)",
-          value: "https://yongfu.name/gloss-search/2022/data.json",
-        },
-        {
-          text: "霧台魯凱 (2020)",
-          value: "https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json",
-        },
-        // {
-        //   text: "Kanakanavu",
-        //   value: "https://yongfu.name/temp-data/kanakanavu.json",
-        // },
-        // {
-        //   text: "Seediq",
-        //   value: "https://yongfu.name/glossParser/seediq-long-text.json",
-        // },
-        // {
-        //   text: "Long Texts",
-        //   value: "https://yongfu.name/glossParser/all_lang-long-text.json",
-        // },
-        {
-          text: "Local",
-          value: 0, // Must be set to 0 for Vue logic
-        },
-      ],
+      databases_url: "https://raw.githubusercontent.com/liao961120/gloss-search-frontend/master/databases.json",
+      databases: [],
       querytypes: [
         {
           text: "Original",
@@ -356,7 +332,7 @@ export default {
         regex: (this.$route.query.regex) ? this.$route.query.regex : 1,
         type: (this.$route.query.type) ? this.$route.query.type : "gloss",
       },
-      database: (this.$route.query.db) ? this.$route.query.db : "https://yongfu.name/gloss-search/2022/data.json", //"https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json",
+      database: "", //"https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json",
       results: [],
       docfilter: (this.$route.query.filter) ? this.$route.query.filter : "",
       infscroll: 15,
@@ -483,9 +459,13 @@ export default {
     }
   },
   created: function () {
-    this.$http.get(this.database).then(function (data) {
-      this.results = data.body;
-    });
+    this.$http.get(this.databases_url).then(function (data) {
+      this.databases = data.body.search;
+      this.database = (this.$route.query.db) ? this.$route.query.db : this.databases[0].value;
+      this.$http.get(this.database).then(function (data) {
+        this.results = data.body;
+      });
+    })
   },
   watch: {
     database: function () {

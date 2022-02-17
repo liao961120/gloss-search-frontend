@@ -173,30 +173,10 @@ export default {
         return {
             search: '',
             words: [],
-            webdb_url: 'https://yongfu.name/gloss-search/2022/glossary.json',
             drawer: null,
-            databases: [
-                {
-                    text: "敬請期待 (2022)",
-                    value: "https://yongfu.name/gloss-search/2022/glossary.json"
-                },
-                {
-                    text: "霧台魯凱 (2020)",
-                    value: "https://yongfu.name/gloss-search/2020_Budai_Rukai/glossary.json"
-                },
-                // {
-                //     text: "Kanakanavu",
-                //     value: "https://yongfu.name/temp-data/kanakanavu-glossary.json"
-                // },
-                // {
-                //     text: "Seediq",
-                //     value: "https://yongfu.name/glossParser/seediq-long-text-glossary.json"
-                // },
-                // {
-                //     text: "Long Texts",
-                //     value: "https://yongfu.name/glossParser/all_lang-long-text-glossary.json"
-                // },
-                ],
+            databases_url: "https://raw.githubusercontent.com/liao961120/gloss-search-frontend/master/databases.json",
+            databases: [],
+            webdb_url: '',
         }
     },
     computed: {
@@ -226,9 +206,13 @@ export default {
         },
     },
     created: function () {
-            this.$http.get(this.webdb_url).then(function(data) {
+        this.$http.get(this.databases_url).then(function (data) {
+            this.databases = data.body.lexicon;
+            this.webdb_url = this.databases[0].value;
+            this.$http.get(this.webdb_url).then(function (data) {
                 this.words = data.body;
-        });
+            });
+        })
     },
     watch: {
         webdb_url: function() {
