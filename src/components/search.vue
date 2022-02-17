@@ -311,7 +311,7 @@ export default {
       travis: false,
       search_results_key: 0,
       drawer: null,
-      databases_url: "https://raw.githubusercontent.com/liao961120/gloss-search-frontend/master/databases.json",
+      databases_url: "https://yongfu.name/gloss-search-frontend/databases.json",
       databases: [],
       querytypes: [
         {

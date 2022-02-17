@@ -174,7 +174,7 @@ export default {
             search: '',
             words: [],
             drawer: null,
-            databases_url: "https://raw.githubusercontent.com/liao961120/gloss-search-frontend/master/databases.json",
+            databases_url: "https://yongfu.name/gloss-search-frontend/databases.json",
             databases: [],
             webdb_url: '',
         }
