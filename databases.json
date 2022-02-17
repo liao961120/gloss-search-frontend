@@ -1,14 +1,17 @@
 [
     {
         "text": "知本卑南 (2022)",
-        "value": "https://yongfu.name/gloss-search/2022/glossary.json"
+        "lexicon": "https://yongfu.name/gloss-search/2022/glossary.json",
+        "search": "https://yongfu.name/gloss-search/2022/data.json"
     },
     {
         "text": "霧台魯凱 (2020)",
-        "value": "https://yongfu.name/gloss-search/2020_Budai_Rukai/glossary.json"
+        "lexicon": "https://yongfu.name/gloss-search/2020_Budai_Rukai/glossary.json",
+        "search": "https://yongfu.name/gloss-search/2020_Budai_Rukai/data.json"
     },
     {
         "text": "Local",
-        "value": 0
+        "lexicon": 0,
+        "search": 0,
     }
 ]
